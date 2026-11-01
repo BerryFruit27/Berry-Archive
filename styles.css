@@ -1,0 +1,1428 @@
+/*
+    BERRY ARCHIVE — CSS GUIDE
+
+    This file controls the appearance of the archive.
+    Each section has a short comment explaining what it styles.
+
+    QUICK GUIDE
+    - A selector (such as .topbar) chooses which elements to style.
+    - Properties go inside the braces { }.
+    - Change one value at a time, save, then refresh the page.
+    - The @media sections adjust the layout for smaller screens.
+*/
+
+/* Defines the reusable colours, fonts, and shadow used throughout the website. */
+:root
+{
+    --paper: #f1e5fe;
+    --paper-deep: #ced9fb;
+    --card: #f3eff5;
+    --ink: #302b29;
+    --muted: #7e736d;
+    --line: #988fac;
+    --plum: #79546d;
+    --plum-dark: #604057;
+    --sage: #1d0a23;
+    --rose: #f6dbdb;
+    --shadow: 0 12px 35px rgba(63,45,40,.07);
+    font-family: Georgia,"Times New Roman",serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-synthesis: none;
+}
+/* Makes element sizing easier to manage by including padding and borders in element widths. */
+*
+{
+    box-sizing: border-box;
+}
+/* Sets the basic page spacing, minimum height, and background colour. */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+}
+/* Makes form controls use the same font as the surrounding page. */
+button,input,select,textarea
+{
+    font: inherit;
+}
+/* Shows the pointer cursor when a button can be clicked. */
+button
+{
+    cursor: pointer;
+}
+/* Adds a clear focus outline for keyboard navigation. */
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible
+{
+    outline: 3px solid #b99ab0;
+    outline-offset: 2px;
+}
+/* Arranges the site name and action buttons across the top of the page. */
+.topbar
+{
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(20px,6vw,88px);
+    border-bottom: 1px solid var(--line);
+    background: rgba(188, 180, 255, 0.72);
+    gap: 20px;
+}
+/* Styles the clickable site name and logo area. */
+.brand
+{
+    border: 0;
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    color: var(--ink);
+    padding: 0;
+}
+/* Styles the round decorative mark beside the site name. */
+.brand-mark
+{
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--plum);
+    color: #ffffff;
+    font-size: 25px;
+}
+/* Styles the main site name in the header. */
+.brand strong
+{
+    display: block;
+    font-size: 21px;
+    letter-spacing: -.6px;
+    font-weight: normal;
+}
+/* Styles the small subtitle beneath the site name. */
+.brand small
+{
+    display: block;
+    color: var(--muted);
+    font: 11px Arial,sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 3px;
+}
+/* Places the header action buttons beside one another. */
+.top-actions
+{
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+/* Sets the shared appearance and spacing for buttons. */
+.button
+{
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 10px 15px;
+    font: 13px Arial,sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background .15s,border .15s;
+    color: var(--ink);
+    white-space: nowrap;
+}
+/* Styles the main action button with the site's plum colour. */
+.button-primary
+{
+    background: rgb(65, 5, 121);
+    color: #fffaf7;
+}
+/* Changes the main button colour when the pointer is over it. */
+.button-primary:hover
+{
+    background:rgb(42, 4, 80) ;
+}
+/* Styles a secondary button with a light border. */
+.button-quiet
+{
+    background: transparent;
+    border-color: var(--line);
+}
+/* Adds a subtle background when hovering over a secondary button. */
+.button-quiet:hover
+{
+    background:rgb(226, 194, 255);
+}
+/* Makes the file upload label look and behave like a clickable control. */
+.file-label
+{
+    cursor: pointer;
+}
+/* Sets the width and side spacing of the main page content. */
+.view
+{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+/* Hides an element completely when JavaScript adds this class. */
+.hidden
+{
+    display: none!important;
+}
+/* Styles the welcome banner at the top of the bookshelf. */
+.welcome
+{
+    position: relative;
+    overflow: hidden;
+    margin: 34px 0 30px;
+    min-height: 248px;
+    border-radius: 14px;
+    background: #1f0f06;
+    display: flex;
+    align-items: center;
+    padding: 38px clamp(25px,5vw,64px);
+}
+/* Keeps the welcome text above the decorative artwork. */
+.welcome-copy
+{
+    position: relative;
+    z-index: 1;
+}
+/* Styles the small uppercase label used above headings. */
+.eyebrow
+{
+    font: 10px Arial,sans-serif;
+    letter-spacing: 2px;
+    color: var(--plum);
+    font-weight: bold;
+    margin: 0 0 12px;
+}
+/* Sets the size and spacing of the main welcome heading. */
+.welcome h1
+{
+    font-size: clamp(34px,4.3vw,51px);
+    font-weight: normal;
+    letter-spacing: -1.6px;
+    line-height: 1.06;
+    margin: 0;
+}
+/* Styles the short description under the welcome heading. */
+.welcome-sub
+{
+    color: #756660;
+    font-size: 15px;
+    margin: 17px 0 0;
+}
+/* Positions the decorative artwork in the welcome banner. */
+.welcome-art
+{
+    position: absolute;
+    right: 7%;
+    top: 0;
+    height: 100%;
+    width: 36%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a98a8e;
+}
+/* Styles the welcome art span element or component. */
+.welcome-art span
+{
+    font-size: 150px;
+    opacity: .55;
+    transform: rotate(-14deg);
+}
+/* Styles the welcome art i element or component. */
+.welcome-art i
+{
+    font-size: 115px;
+    font-style: normal;
+    position: absolute;
+    right: 15%;
+    bottom: -15px;
+    transform: rotate(23deg);
+    opacity: .65;
+}
+/* Styles the welcome art b element or component. */
+.welcome-art b
+{
+    position: absolute;
+    right: 2%;
+    top: 23px;
+    font-size: 48px;
+    font-weight: normal;
+}
+/* Groups the search field and bookshelf filters. */
+.library-tools
+{
+    margin: 0 0 38px;
+}
+/* Styles the search bar container and its icon. */
+.search-wrap
+{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0 16px;
+    height: 48px;
+    color: var(--plum);
+}
+/* Sets the size of the search icon. */
+.search-wrap span
+{
+    font-size: 25px;
+}
+/* Styles the text field used to search stories. */
+.search-wrap input
+{
+    border: 0;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font: 14px Arial,sans-serif;
+    color: var(--ink);
+}
+/* Removes the extra outline inside the already outlined search bar. */
+.search-wrap input:focus-visible
+{
+    outline: none;
+}
+/* Places the sorting and filtering controls in a row. */
+.filter-row
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    
+}
+/* Styles the drop-down filter and its custom arrow. */
+.select-wrap select
+{
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 9px 32px 9px 11px;
+    color: #635751;
+    font: 12px Arial,sans-serif;
+    background-image: linear-gradient(45deg,transparent 50%,#8b7b73 50%),linear-gradient(135deg,#8b7b73 50%,transparent 50%);
+    background-position: calc(100% - 14px) 14px,calc(100% - 10px) 14px;
+    background-size: 4px 4px;
+    background-repeat: no-repeat;
+}
+/* Displays the number of stories in the current bookshelf view. */
+.library-count
+{
+    margin-left: auto;
+    color: var(--muted);
+    font: 12px Arial,sans-serif;
+}
+/* Arranges a section title and its related action. */
+.section-heading
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 18px;
+}
+/* Adjusts spacing above a section heading. */
+.section-heading .eyebrow
+{
+    margin-bottom: 7px;
+}
+/* Styles the title of a bookshelf section. */
+.section-heading h2
+{
+    font-size: 27px;
+    font-weight: normal;
+    margin: 0;
+    letter-spacing: -.5px;
+}
+/* Styles a simple text-only button. */
+.text-button
+{
+    border: 0;
+    background: none;
+    color: var(--plum);
+    font: 12px Arial,sans-serif;
+    padding: 8px 0;
+}
+/* Underlines the text button when hovered over. */
+.text-button:hover
+{
+    text-decoration: underline;
+}
+/* Arranges story cards in a responsive grid. */
+.fic-grid
+{
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 16px;
+}
+/* Styles an individual story card on the bookshelf. */
+.fic-card
+{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 21px 20px 17px;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 14px rgba(63,45,40,.025);
+    transition: transform .15s,box-shadow .15s;
+    cursor: pointer;
+}
+/* Lifts the story card slightly when the pointer is over it. */
+.fic-card:hover
+{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+/* Places the fandom label and bookmark button at the top of a story card. */
+.card-top
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 13px;
+}
+/* Styles the fandom name on a story card. */
+.card-fandom
+{
+    font: 10px Arial,sans-serif;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    color: var(--sage);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/* Styles the bookmark control on a story card. */
+.card-bookmark
+{
+    border: 0;
+    background: transparent;
+    color:rgb(134, 5, 255);
+    font-size: 20px;
+    padding: 0 3px;
+    line-height: 1;
+}
+/* Styles the story title on a card. */
+.fic-card h3
+{
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: normal;
+    margin: 0 0 7px;
+    overflow-wrap: anywhere;
+}
+/* Styles the author name beneath the story title. */
+.card-author
+{
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 13px;
+}
+/* Shows a short, clipped summary on each story card. */
+.card-summary
+{
+    font-size: 13px;
+    line-height: 1.5;
+    color: #655a55;
+    margin: 0 0 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* Arranges tags and badges in rows that can wrap. */
+.tag-list,.badge-row
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+/* Styles an individual story tag. */
+.tag
+{
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 4px;
+    background: #b1d8ff;
+    color: #161616;
+    font: 10px Arial,sans-serif;
+}
+/* Styles the bottom row of a story card. */
+.card-bottom
+{
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #f0e9e2;
+    color: var(--muted);
+    font: 10px Arial,sans-serif;
+    gap: 8px;
+}
+/* Styles the label showing a story's reading status. */
+.status-pill
+{
+    padding: 4px 7px;
+    border-radius: 4px;
+    background: #e9eee8;
+    color: #60735f;
+}
+/* Gives read stories a different status colour. */
+.status-pill.read
+{
+    background: #eee7ef;
+    color: #795b79;
+}
+/* Styles the message shown when the bookshelf has no matching stories. */
+.empty-state
+{
+    display: none;
+    text-align: center;
+    padding: 55px 20px 65px;
+    border: 1px dashed #d8c8bd;
+    border-radius: 10px;
+    background: rgba(255,253,249,.45);
+}
+/* Displays the empty bookshelf message when needed. */
+.empty-state.show
+{
+    display: block;
+}
+/* Sets the size and colour of the empty-state decoration. */
+.empty-icon
+{
+    font-size: 40px;
+    color: var(--plum);
+}
+/* Styles the heading in the empty-state message. */
+.empty-state h3
+{
+    font-size: 24px;
+    font-weight: normal;
+    margin: 10px 0;
+}
+/* Styles the explanatory text in the empty-state message. */
+.empty-state p
+{
+    color: var(--muted);
+    font: 13px Arial,sans-serif;
+    margin: 0 auto 20px;
+    max-width: 360px;
+    line-height: 1.6;
+}
+/* Arranges and styles the footer information. */
+.site-footer
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 26px 0 30px;
+    margin-top: 35px;
+    border-top: 1px solid var(--line);
+    font: 10px Arial,sans-serif;
+    color: #94857d;
+}
+/* Styles the small dot showing that the archive works offline. */
+.offline-dot
+{
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #789478;
+    margin-right: 5px;
+}
+/* Arranges the controls above the story reader. */
+.reader-toolbar
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 0 20px;
+}
+/* Groups the reader action buttons together. */
+.reader-actions
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* Styles a small circular icon button. */
+.icon-button
+{
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--plum);
+    font-size: 22px;
+}
+/* Sets the main story-reading panel. */
+.reader
+{
+    max-width: 790px;
+    margin: 0 auto 50px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+}
+/* Styles the story title and details section. */
+.reader-heading
+{
+    padding: clamp(25px,5vw,55px) clamp(22px,7vw,78px) 32px;
+    border-bottom: 1px solid var(--line);
+}
+/* Styles the story title in the reader. */
+.reader-heading h1
+{
+    font-size: clamp(31px,4vw,43px);
+    font-weight: normal;
+    letter-spacing: -1px;
+    line-height: 1.12;
+    margin: 0 0 10px;
+    overflow-wrap: anywhere;
+}
+/* Styles the author name in the reader. */
+.reader-author
+{
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 18px;
+}
+/* Styles a small information badge. */
+.badge
+{
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 5px 8px;
+    color: #77665f;
+    font: 10px Arial,sans-serif;
+}
+/* Styles story statistics such as word count and chapter details. */
+.reader-stats
+{
+    font: 11px Arial,sans-serif;
+    color: var(--muted);
+    margin: 18px 0 0;
+}
+/* Styles the story summary shown before the text. */
+.reader-summary
+{
+    font-size: 14px;
+    line-height: 1.7;
+    color: #5e514c;
+    margin: 20px 0;
+}
+/* Adds spacing around the story tags in the reader. */
+.reader-tags
+{
+    margin-top: 15px;
+}
+/* Styles the reading progress information. */
+.reader-progress-row
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 16px;
+    border-top: 1px solid #a1ebf3;
+    color: var(--muted);
+    font: 11px Arial,sans-serif;
+}
+/* Controls the font, line spacing, and padding of the story text. */
+.fic-content
+{
+    padding: clamp(25px,7vw,75px);
+    font-size: 17px;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+}
+/* Adds space after paragraphs in the story. */
+.fic-content p
+{
+    margin: 0 0 1.3em;
+}
+/* Styles headings imported with a story. */
+.fic-content h1,.fic-content h2,.fic-content h3
+{
+    line-height: 1.3;
+    font-weight: normal;
+    margin: 1.6em 0 .7em;
+}
+/* Styles quotations included in the story text. */
+.fic-content blockquote
+{
+    margin: 1.2em 0;
+    padding-left: 20px;
+    border-left: 2px solid #facddc;
+    color: #fecdc4;
+}
+/* Keeps images inside the reading area. */
+.fic-content img
+{
+    max-width: 100%;
+    height: auto;
+}
+/* Allows preformatted text to wrap instead of overflowing. */
+.fic-content pre
+{
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+/* Keeps wide tables scrollable within the reading area. */
+.fic-content table
+{
+    max-width: 100%;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+}
+/* Adds borders and spacing to cells in imported tables. */
+.fic-content td,.fic-content th
+{
+    border: 1px solid var(--line);
+    padding: 7px;
+}
+/* Styles links inside a story. */
+.fic-content a
+{
+    color: var(--plum);
+    text-decoration-thickness: 1px;
+}
+/* Styles the end-of-story message and controls. */
+.reader-end
+{
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+}
+/* Styles the decorative symbol at the end of a story. */
+.reader-end>span
+{
+    color: var(--plum);
+    font-size: 24px;
+}
+/* Styles the short message at the end of a story. */
+.reader-end p
+{
+    font-size: 12px;
+    margin: 6px 0 17px;
+}
+/* Styles the add/edit story dialog and limits its size. */
+.fic-dialog
+{
+    width: min(760px,calc(100% - 28px));
+    max-height: 90vh;
+    overflow: auto;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--ink);
+    padding: 0;
+    box-shadow: 0 20px 80px #30201e35;
+}
+/* Darkens the page behind the add/edit dialog. */
+.fic-dialog::backdrop
+{
+    background: #2b2225a6;
+    backdrop-filter: blur(3px);
+}
+/* Adds padding inside the add/edit story form. */
+.fic-dialog form
+{
+    padding: clamp(20px,4vw,36px);
+}
+/* Arranges the dialog title and close button. */
+.dialog-heading
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+/* Adjusts the small label above the dialog title. */
+.dialog-heading .eyebrow
+{
+    margin-bottom: 7px;
+}
+/* Styles the main title inside the dialog. */
+.dialog-heading h2
+{
+    font-size: 28px;
+    font-weight: normal;
+    margin: 0;
+}
+/* Arranges form fields in two columns on larger screens. */
+.form-grid
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+/* Stacks a form label and its input control. */
+.field
+{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font: 12px Arial,sans-serif;
+    color: #675a54;
+}
+/* Makes a form field span the full width of the form grid. */
+.field-wide
+{
+    grid-column: 1/-1;
+}
+/* Styles text inputs, drop-downs, and text areas in the form. */
+.field input,.field select,.field textarea
+{
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fffefa;
+    padding: 11px 12px;
+    font: 13px Arial,sans-serif;
+    color: var(--ink);
+    min-width: 0;
+}
+/* Allows a form text area to be resized vertically. */
+.field textarea
+{
+    resize: vertical;
+    line-height: 1.5;
+}
+/* Styles the small help text beneath a form label. */
+.field-hint
+{
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: normal;
+}
+/* Highlights a required-field marker. */
+.required
+{
+    color: #f2919f;
+}
+/* Separates the story content import area from the other fields. */
+.content-source
+{
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+}
+/* Arranges the content import heading and its instructions. */
+.source-heading
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+/* Styles the content import section heading. */
+.source-heading h3
+{
+    font-size: 17px;
+    font-weight: normal;
+    margin: 0 0 5px;
+}
+/* Styles the help text in the content import section. */
+.source-heading p
+{
+    font: 11px Arial,sans-serif;
+    color: var(--muted);
+    margin: 0;
+}
+/* Shows the name of the selected file. */
+.file-name
+{
+    font: 11px Arial,sans-serif;
+    color: var(--sage);
+    margin-bottom: 10px;
+}
+/* Styles the note explaining local/offline storage. */
+.privacy-note
+{
+    font: 10px/1.5 Arial,sans-serif;
+    color: var(--muted);
+    margin: 10px 0 0;
+}
+/* Arranges the save and cancel buttons at the bottom of the dialog. */
+.dialog-footer
+{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+/* Styles the small temporary notification shown after an action. */
+.toast
+{
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translate(-50%,20px);
+    opacity: 0;
+    pointer-events: none;
+    background: #302b29;
+    color: #fffdf9;
+    border-radius: 7px;
+    padding: 12px 18px;
+    font: 12px Arial,sans-serif;
+    box-shadow: var(--shadow);
+    transition: all .2s;
+    z-index: 10;
+    max-width: calc(100% - 30px);
+}
+/* Makes the notification visible and moves it into place. */
+.toast.show
+{
+    opacity: 1;
+    transform: translate(-50%,0);
+}
+/* Hides helper text visually while keeping it available to screen readers. */
+.sr-only
+{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+@media(max-width:850px)
+{
+    /* Arranges story cards in a responsive grid. */
+    .fic-grid
+    {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+    /* Sets the width and side spacing of the main page content. */
+    .view
+    {
+        padding: 0 22px;
+    }
+    /* Positions the decorative artwork in the welcome banner. */
+    .welcome-art
+    {
+        right: 2%;
+        width: 30%;
+    }
+    /* Styles the welcome art span element or component. */
+    .welcome-art span
+    {
+        font-size: 120px;
+    }
+    /* Arranges the site name and action buttons across the top of the page. */
+    .topbar
+    {
+        padding: 0 22px;
+    }
+}
+@media(max-width:600px)
+{
+    /* Arranges the site name and action buttons across the top of the page. */
+    .topbar
+    {
+        height: auto;
+        min-height: 72px;
+        padding: 13px 16px;
+        gap: 10px;
+    }
+    /* Styles the round decorative mark beside the site name. */
+    .brand-mark
+    {
+        width: 35px;
+        height: 35px;
+        font-size: 21px;
+    }
+    /* Styles the main site name in the header. */
+    .brand strong
+    {
+        font-size: 18px;
+    }
+    /* Styles the small subtitle beneath the site name. */
+    .brand small
+    {
+        font-size: 9px;
+    }
+    /* Places the header action buttons beside one another. */
+    .top-actions
+    {
+        gap: 6px;
+    }
+    /* Styles the top actions  button element or component. */
+    .top-actions .button
+    {
+        padding: 9px 10px;
+        font-size: 11px;
+    }
+    /* Styles the top actions #backupBtn, top actions label[for=backupInput] element or component. */
+    .top-actions #backupBtn,.top-actions label[for=backupInput]
+    {
+        display: none;
+    }
+    /* Sets the width and side spacing of the main page content. */
+    .view
+    {
+        padding: 0 15px;
+    }
+    /* Styles the welcome banner at the top of the bookshelf. */
+    .welcome
+    {
+        margin: 20px 0 22px;
+        min-height: 210px;
+        padding: 28px 22px;
+    }
+    /* Sets the size and spacing of the main welcome heading. */
+    .welcome h1
+    {
+        font-size: 37px;
+    }
+    /* Styles the short description under the welcome heading. */
+    .welcome-sub
+    {
+        max-width: 245px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    /* Positions the decorative artwork in the welcome banner. */
+    .welcome-art
+    {
+        right: -5%;
+        width: 36%;
+        opacity: .6;
+    }
+    /* Styles the welcome art span element or component. */
+    .welcome-art span
+    {
+        font-size: 95px;
+    }
+    /* Styles the welcome art i element or component. */
+    .welcome-art i
+    {
+        font-size: 80px;
+    }
+    /* Styles the welcome art b element or component. */
+    .welcome-art b
+    {
+        font-size: 35px;
+    }
+    /* Places the sorting and filtering controls in a row. */
+    .filter-row
+    {
+        flex-wrap: wrap;
+    }
+    /* Styles the drop-down filter and its custom arrow. */
+    .select-wrap select
+    {
+        font-size: 11px;
+        max-width: 155px;
+    }
+    /* Displays the number of stories in the current bookshelf view. */
+    .library-count
+    {
+        width: 100%;
+        text-align: right;
+        margin-top: 1px;
+    }
+    /* Arranges story cards in a responsive grid. */
+    .fic-grid
+    {
+        grid-template-columns: 1fr;
+        gap: 11px;
+    }
+    /* Styles an individual story card on the bookshelf. */
+    .fic-card
+    {
+        min-height: 0;
+        padding: 18px;
+    }
+    /* Shows a short, clipped summary on each story card. */
+    .card-summary
+    {
+        -webkit-line-clamp: 2;
+    }
+    /* Styles the title of a bookshelf section. */
+    .section-heading h2
+    {
+        font-size: 24px;
+    }
+    /* Arranges and styles the footer information. */
+    .site-footer
+    {
+        flex-direction: column;
+        gap: 8px;
+        line-height: 1.5;
+    }
+    /* Arranges the controls above the story reader. */
+    .reader-toolbar
+    {
+        padding: 18px 0;
+    }
+    /* Styles the story title and details section. */
+    .reader-heading
+    {
+        padding: 27px 22px 25px;
+    }
+    /* Styles the story title in the reader. */
+    .reader-heading h1
+    {
+        font-size: 34px;
+    }
+    /* Controls the font, line spacing, and padding of the story text. */
+    .fic-content
+    {
+        padding: 28px 22px;
+        font-size: 16px;
+    }
+    /* Styles the end-of-story message and controls. */
+    .reader-end
+    {
+        padding: 25px 15px;
+    }
+    /* Arranges form fields in two columns on larger screens. */
+    .form-grid
+    {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+    /* Makes a form field span the full width of the form grid. */
+    .field-wide
+    {
+        grid-column: auto;
+    }
+    /* Adds padding inside the add/edit story form. */
+    .fic-dialog form
+    {
+        padding: 21px 17px;
+    }
+    /* Styles the main title inside the dialog. */
+    .dialog-heading h2
+    {
+        font-size: 25px;
+    }
+    /* Arranges the content import heading and its instructions. */
+    .source-heading
+    {
+        align-items: flex-start;
+    }
+    /* Styles the help text in the content import section. */
+    .source-heading p
+    {
+        line-height: 1.5;
+    }
+    /* Styles the dialog footer  button element or component. */
+    .dialog-footer .button
+    {
+        flex: 1;
+    }
+    /* Styles the reader actions  button element or component. */
+    .reader-actions .button
+    {
+        padding: 9px 10px;
+    }
+}
+/* Styles the area used to add and edit story chapters. */
+.chapter-editor
+{
+    margin-top: 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+    background: #fcf8f2;
+}
+/* Arranges the chapter editor heading and its action. */
+.chapter-editor-top
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+/* Styles the chapter editor heading. */
+.chapter-editor-top h4
+{
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 4px;
+}
+/* Styles the chapter editor instructions. */
+.chapter-editor-top p
+{
+    font: 11px/1.45 Arial,sans-serif;
+    color: var(--muted);
+    margin: 0;
+}
+/* Stacks chapter edit cards vertically. */
+.chapter-editor-list
+{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+/* Styles the editing area for one chapter. */
+.chapter-edit-card
+{
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--card);
+    padding: 12px;
+}
+/* Arranges the chapter number, title field, and controls. */
+.chapter-edit-header
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+/* Shows the chapter number beside its title. */
+.chapter-edit-header .chapter-number
+{
+    font: 10px Arial,sans-serif;
+    color: var(--muted);
+    min-width: 56px;
+}
+/* Styles the field used to edit a chapter title. */
+.chapter-edit-header input
+{
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 9px;
+    font: 12px Arial,sans-serif;
+}
+/* Styles the chapter editing controls. */
+.chapter-edit-header button
+{
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    padding: 7px 9px;
+    font: 11px Arial,sans-serif;
+}
+/* Styles the field used to edit chapter HTML or text. */
+.chapter-edit-card textarea
+{
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 10px;
+    font: 12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;
+    resize: vertical;
+}
+/* Groups the buttons used to move chapters up or down. */
+.chapter-edit-reorder
+{
+    display: flex;
+    gap: 5px;
+}
+/* Separates the chapter selector from the story details. */
+.chapter-navigation
+{
+    margin-top: 22px;
+    padding: 15px 0 0;
+    border-top: 1px solid var(--line);
+}
+/* Styles the label above the chapter selector. */
+.chapter-picker-label
+{
+    display: block;
+    font: 10px Arial,sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 7px;
+}
+/* Styles the drop-down used to choose a chapter. */
+.chapter-navigation select
+{
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fffefa;
+    padding: 10px;
+    font: 13px Arial,sans-serif;
+    color: var(--ink);
+}
+/* Arranges the previous and next chapter buttons. */
+.chapter-nav-buttons
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 10px;
+}
+/* Styles the current chapter position indicator. */
+.chapter-nav-buttons span
+{
+    font: 10px Arial,sans-serif;
+    color: var(--muted);
+    text-align: center;
+}
+/* Arranges chapter navigation controls below the story text. */
+.bottom-chapter-navigation
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 clamp(22px,7vw,75px) 30px;
+}
+/* Styles the bottom chapter navigation  button:disabled, chapter nav buttons  button:disabled element or component. */
+.bottom-chapter-navigation .button:disabled,.chapter-nav-buttons .button:disabled
+{
+    opacity: .4;
+    cursor: not-allowed;
+}
+@media(max-width:600px)
+{
+    /* Arranges the chapter editor heading and its action. */
+    .chapter-editor-top
+    {
+        align-items: flex-start;
+    }
+    /* Styles the chapter editor instructions. */
+    .chapter-editor-top p
+    {
+        max-width: 210px;
+    }
+    /* Arranges the chapter number, title field, and controls. */
+    .chapter-edit-header
+    {
+        flex-wrap: wrap;
+    }
+    /* Shows the chapter number beside its title. */
+    .chapter-edit-header .chapter-number
+    {
+        min-width: auto;
+    }
+    /* Styles the field used to edit a chapter title. */
+    .chapter-edit-header input
+    {
+        order: 2;
+        flex-basis: 100%;
+    }
+    /* Groups the buttons used to move chapters up or down. */
+    .chapter-edit-reorder
+    {
+        margin-left: auto;
+    }
+    /* Styles the chapter nav buttons  button element or component. */
+    .chapter-nav-buttons .button
+    {
+        padding: 9px 10px;
+        font-size: 11px;
+    }
+    /* Arranges chapter navigation controls below the story text. */
+    .bottom-chapter-navigation
+    {
+        padding: 0 22px 25px;
+    }
+    /* Styles the area used to add and edit story chapters. */
+    .chapter-editor
+    {
+        padding: 10px;
+    }
+}
+
+
+
+
+
+/* Keeps the delete and bookmark buttons together. */
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Styles the Delete Fic button. */
+.card-delete {
+  border: none;
+  background: transparent;
+  color: #ff1201;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.card-delete:hover {
+  background: #fee2e2;
+}
+
+/* Advanced library filters */
+.advanced-filters {
+    margin-top: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(243, 239, 245, 0.7);
+    padding: 12px 14px;
+}
+.advanced-filters summary {
+    cursor: pointer;
+    color: var(--plum-dark);
+    font: 13px Arial, sans-serif;
+    font-weight: bold;
+    user-select: none;
+}
+.advanced-filter-grid {
+    margin-top: 16px;
+}
+.advanced-filters input,
+.advanced-filters select {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px;
+    background: var(--card);
+    color: var(--ink);
+    font: 13px Arial, sans-serif;
+}
+.advanced-filters input::placeholder {
+    color: var(--muted);
+    opacity: .85;
+}
+@media (max-width: 650px) {
+    .filter-row {
+        flex-wrap: wrap;
+    }
+    .library-count {
+        width: 100%;
+        margin-left: 0;
+    }
+    .advanced-filters {
+        padding: 11px;
+    }
+}

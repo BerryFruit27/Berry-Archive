@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "Berry's Archive",
+  "short_name": "Berry's Archive",
+  "description": "A personal offline fanfiction library.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f1e5fe",
+  "theme_color": "#410579",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
