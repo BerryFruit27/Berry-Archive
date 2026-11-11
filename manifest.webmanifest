@@ -1,10 +1,10 @@
 {
-  "id": "./",
+  "id": "/Berry-Archive/",
   "name": "Berry's Archive",
   "short_name": "Berry's Archive",
   "description": "A personal offline fanfiction library.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/Berry-Archive/",
+  "scope": "/Berry-Archive/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#f1e5fe",
