@@ -982,11 +982,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         padding: 9px 10px;
         font-size: 11px;
     }
-    /* Styles the top actions #backupBtn, top actions label[for=backupInput] element or component. */
-    .top-actions #backupBtn,.top-actions label[for=backupInput]
-    {
-        display: none;
-    }
+   
     /* Sets the width and side spacing of the main page content. */
     .view
     {
