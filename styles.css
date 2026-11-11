@@ -1422,3 +1422,20 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         padding: 11px;
     }
 }
+
+
+/* Makes the header fit all buttons on small phone screens. */
+@media (max-width: 600px)
+{
+    .topbar
+    {
+        flex-wrap: wrap;
+    }
+
+    .top-actions
+    {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
