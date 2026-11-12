@@ -541,7 +541,7 @@ function parseTags(value) {
   // Updates the library when tag filters change.
   $("includeTagsInput").addEventListener("input", renderLibrary);
   $("excludeTagsInput").addEventListener("input", renderLibrary);
-  h$("tagMatchMode").addEventListener("change", renderLibrary);
+  $("tagMatchMode").addEventListener("change", renderLibrary);
   
 
 
