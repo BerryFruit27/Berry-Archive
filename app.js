@@ -124,6 +124,51 @@
     const q = state.query.trim().toLocaleLowerCase("en-CA");
     if (q) list = list.filter(f => [f.title, f.author, f.fandom, f.summary, ...(f.tags || [])].join(" ").toLocaleLowerCase("en-CA").includes(q));
 
+
+
+
+    // Gets the included tags and ignores capitalisation.
+const includeTags = $("includeTagsInput").value
+  .split(",")
+  .map(tag => tag.trim().toLowerCase())
+  .filter(Boolean);
+
+// Gets the excluded tags and ignores capitalisation.
+const excludeTags = $("excludeTagsInput").value
+  .split(",")
+  .map(tag => tag.trim().toLowerCase())
+  .filter(Boolean);
+
+// Filters stories by included tags.
+if (includeTags.length) {
+  const matchMode = $("tagMatchMode").value;
+
+  list = list.filter(fic => {
+    const ficTags = (fic.tags || []).map(tag => tag.toLowerCase());
+
+    if (matchMode === "all") {
+      return includeTags.every(tag => ficTags.includes(tag));
+    }
+
+    return includeTags.some(tag => ficTags.includes(tag));
+  });
+}
+
+// Hides stories containing excluded tags.
+if (excludeTags.length) {
+  list = list.filter(fic => {
+    const ficTags = (fic.tags || []).map(tag => tag.toLowerCase());
+
+    return !excludeTags.some(tag => ficTags.includes(tag));
+  });
+}
+
+
+
+
+
+    
+
     const keyword = $("keywordSearchInput").value.trim().toLocaleLowerCase("en-CA");
 
 if (keyword) {
@@ -426,6 +471,11 @@ function parseTags(value) {
   $("ficDialog").addEventListener("click", e => { if (e.target === $("ficDialog")) closeDialog(); });
   $("searchInput").addEventListener("input", e => { state.query = e.target.value; renderLibrary(); });
   $("keywordSearchInput").addEventListener("input", renderLibrary);
+  // Updates the library when tag filters change.
+  $("includeTagsInput").addEventListener("input", renderLibrary);
+  $("excludeTagsInput").addEventListener("input", renderLibrary);
+  h$("tagMatchMode").addEventListener("change", renderLibrary);
+  
 
 
   
@@ -441,6 +491,9 @@ function parseTags(value) {
 
   $("searchInput").value = "";
   $("keywordSearchInput").value = "";
+  $("includeTagsInput").value = "";
+  $("excludeTagsInput").value = "";
+  $("tagMatchMode").value = "any";
   $("statusFilter").value = "all";
   $("sortSelect").value = "added";
   $("relationshipFilter").value = "";
