@@ -190,14 +190,19 @@
           <select id="ratingInput"><option>Not rated</option><option>General audiences</option><option>Teen and up</option><option>Mature</option><option>Explicit</option><option>Creator chose not to rate</option></select>
         </label>
         <label class="field">Word count <input id="wordsInput" type="number" min="0" step="1" placeholder="Optional"></label>
-        <label class="field field-wide">Tags <span class="field-hint">Separate with commas</span><input id="tagsInput" placeholder="Fluff, angst, slow burn…"></label>
-        
         <label class="field field-wide">
-  Relationships
-  <span class="field-hint">Separate with commas</span>
-  <input id="relationshipsInput" placeholder="Character A/Character B, Character C & Character D">
-</label>
+            Tags
+            <span class="field-hint">Separate with commas</span>
+             <input id="tagsInput" autocomplete="off" placeholder="Start typing a tag...">
+              <span id="tagSuggestions" class="autocomplete-list" hidden></span>
+          </label>
         
+           <label class="field field-wide">
+        Relationships
+        <span class="field-hint">Separate with commas</span>
+        <input id="relationshipsInput" autocomplete="off" placeholder="Start typing a ship...">
+      <span id="relationshipSuggestions" class="autocomplete-list" hidden></span>
+    </label>
         
 
 
