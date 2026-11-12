@@ -123,6 +123,20 @@
     let list = [...state.fics];
     const q = state.query.trim().toLocaleLowerCase("en-CA");
     if (q) list = list.filter(f => [f.title, f.author, f.fandom, f.summary, ...(f.tags || [])].join(" ").toLocaleLowerCase("en-CA").includes(q));
+
+    const keyword = $("keywordSearchInput").value.trim().toLocaleLowerCase("en-CA");
+
+if (keyword) {
+  list = list.filter(f =>
+    [f.title, f.summary, ...(f.tags || [])]
+      .join(" ")
+      .toLocaleLowerCase("en-CA")
+      .includes(keyword)
+  );
+}
+
+
+
     
     const selectedRelationship = $("relationshipFilter").value.toLocaleLowerCase("en-CA");
 
@@ -407,6 +421,10 @@ $("libraryCount").textContent =
   $("cancelDialogBtn").addEventListener("click", closeDialog);
   $("ficDialog").addEventListener("click", e => { if (e.target === $("ficDialog")) closeDialog(); });
   $("searchInput").addEventListener("input", e => { state.query = e.target.value; renderLibrary(); });
+  $("keywordSearchInput").addEventListener("input", renderLibrary);
+
+
+  
   $("statusFilter").addEventListener("change", e => { state.status = e.target.value; renderLibrary(); });
 
   $("relationshipFilter").addEventListener("change", renderLibrary);
@@ -418,6 +436,7 @@ $("libraryCount").textContent =
   state.sort = "added";
 
   $("searchInput").value = "";
+  $("keywordSearchInput").value = "";
   $("statusFilter").value = "all";
   $("sortSelect").value = "added";
   $("relationshipFilter").value = "";
