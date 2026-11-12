@@ -414,6 +414,73 @@ $("libraryCount").textContent =
   }
   // Closes the Add/Edit Story window.
   function closeDialog() { $("ficDialog").close(); }
+
+
+
+// Suggests existing tags or relationships as you type.
+function setupSuggestions(inputId, suggestionsId, propertyName) {
+  const input = $(inputId);
+  const suggestions = $(suggestionsId);
+
+  function updateSuggestions() {
+    const typed = input.value.split(",").pop().trim().toLowerCase();
+
+    suggestions.replaceChildren();
+    suggestions.hidden = true;
+
+    if (!typed) return;
+
+    // Collect existing values without case-sensitive duplicates.
+    const existing = [
+      ...new Map(
+        state.fics
+          .flatMap(fic => fic[propertyName] || [])
+          .map(value => [value.toLowerCase(), value])
+      ).values()
+    ];
+
+    const matches = existing
+      .filter(value => value.toLowerCase().includes(typed))
+      .sort((a, b) => a.localeCompare(b, "en-CA"))
+      .slice(0, 8);
+
+    matches.forEach(value => {
+      const option = document.createElement("button");
+      option.type = "button";
+      option.className = "autocomplete-option";
+      option.textContent = value;
+
+      option.addEventListener("click", () => {
+        const parts = input.value.split(",");
+        parts[parts.length - 1] = " " + value;
+
+        input.value = parts.join(",").trim() + ", ";
+        suggestions.hidden = true;
+        input.focus();
+      });
+
+      suggestions.appendChild(option);
+    });
+
+    suggestions.hidden = matches.length === 0;
+  }
+
+  input.addEventListener("input", updateSuggestions);
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => {
+      suggestions.hidden = true;
+    }, 150);
+  });
+}
+
+// Enable dropdowns for tags and ships.
+setupSuggestions("tagsInput", "tagSuggestions", "tags");
+setupSuggestions("relationshipsInput", "relationshipSuggestions", "relationships");
+
+
+
+  
 // Splits tags at commas and removes duplicates regardless of capitalisation.
 function parseTags(value) {
   const tags = value.split(",").map(t => t.trim()).filter(Boolean);
