@@ -369,10 +369,14 @@ $("libraryCount").textContent =
   }
   // Closes the Add/Edit Story window.
   function closeDialog() { $("ficDialog").close(); }
-  // Splits the tags field at commas, removes blanks, and avoids duplicate tags.
-  function parseTags(value) {
-    return [...new Set(value.split(",").map(t => t.trim()).filter(Boolean))].slice(0, 80);
-  }
+// Splits tags at commas and removes duplicates regardless of capitalisation.
+function parseTags(value) {
+  const tags = value.split(",").map(t => t.trim()).filter(Boolean);
+
+  return tags.filter((tag, index) =>
+    tags.findIndex(t => t.toLowerCase() === tag.toLowerCase()) === index
+  ).slice(0, 80);
+}
   // Reloads saved stories and redraws the bookshelf after a change.
   async function refresh() { state.fics = await getAll(); renderLibrary(); }
   // Adds or removes a bookmark and saves the change.
