@@ -1424,6 +1424,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 }
 
 
+
 /* Makes the header fit all buttons on small phone screens. */
 @media (max-width: 600px)
 {
@@ -1438,4 +1439,32 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         flex-wrap: wrap;
         justify-content: center;
     }
+}
+
+/* Dropdown suggestions for tags and relationships. */
+.autocomplete-list:not([hidden]) {
+    display: block;
+    max-height: 180px;
+    overflow-y: auto;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    background: #fff;
+    margin-top: 5px;
+}
+
+.autocomplete-option {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: #222;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.autocomplete-option:hover,
+.autocomplete-option:focus {
+    background: #eee;
 }
