@@ -237,7 +237,14 @@ $("libraryCount").textContent =
     $("ficGrid").innerHTML = list.map(f => {
       const tags = (f.tags || []).slice(0, 3).map(t => `<span class="tag">${escapeHTML(t)}</span>`).join("");
       const summary = f.summary ? `<p class="card-summary">${escapeHTML(f.summary)}</p>` : "";
-      const words = f.words || wordCount(f.content);
+     // Automatically counts words across all chapters.
+const chapters = normaliseChapters(f);
+
+const words = chapters.reduce((total, chapter) => {
+  return total + wordCount(chapter.content);
+}, 0);
+
+const chapterCount = chapters.length;
       return `<article class="fic-card" tabindex="0" role="button" data-open="${escapeHTML(f.id)}" aria-label="Read ${escapeHTML(f.title)}">
         
       
@@ -278,7 +285,7 @@ $("libraryCount").textContent =
 
         <h3>${escapeHTML(f.title)}</h3><p class="card-author">${f.author ? "by " + escapeHTML(f.author) : "Author unknown"}</p>
         ${summary}<div class="tag-list">${tags}</div>
-        <div class="card-bottom"><span>${formatNumber(words)} words · ${dateLabel(f.createdAt)}</span><span class="status-pill ${f.read ? "read" : ""}">${statusText(f)}</span></div>
+        <div class="card-bottom"><span>${formatNumber(words)} words · ${chapterCount} ${chapterCount === 1 ? "chapter" : "chapters"} · ${dateLabel(f.createdAt)}</span><span class="status-pill ${f.read ? "read" : ""}">${statusText(f)}</span></div>
       </article>`;
     }).join("");
     const empty = list.length === 0;
