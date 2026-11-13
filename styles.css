@@ -1492,3 +1492,20 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .expand-card-btn:hover {
     background-color: #e3d3f5;
 }
+
+
+/* Show two rows of tags by default. */
+.fic-card .tag-list {
+    max-height: 60px;
+    overflow: hidden;
+}
+
+/* Show every tag when the card is expanded. */
+.fic-card:has(.expand-card-btn) .tag-list:has(+ .expand-card-btn) {
+    max-height: 60px;
+}
+
+
+.fic-card.expanded .tag-list {
+    max-height: none;
+}
