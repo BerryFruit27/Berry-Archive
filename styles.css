@@ -1509,3 +1509,24 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .fic-card.expanded .tag-list {
     max-height: none;
 }
+
+
+/* Relationship tags */
+.relationship-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* Mint-green relationship tags */
+.relationship-tag-list .tag {
+  background-color: #BFFFE0;
+  color: #222222;
+  cursor: pointer;
+}
+
+/* Hover effect */
+.relationship-tag-list .tag:hover {
+  background-color: #9FEFCB;
+}
