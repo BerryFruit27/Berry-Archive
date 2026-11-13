@@ -477,9 +477,10 @@ function setupSuggestions(inputId, suggestionsId, propertyName) {
         const parts = input.value.split(",");
         parts[parts.length - 1] = " " + value;
 
-        input.value = parts.join(",").trim() + ", ";
-        suggestions.hidden = true;
-        input.focus();
+      input.value = parts.join(",").trim() + ", ";
+      suggestions.hidden = true;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.focus();
       });
 
       suggestions.appendChild(option);
@@ -500,7 +501,8 @@ function setupSuggestions(inputId, suggestionsId, propertyName) {
 // Enable dropdowns for tags and ships.
 setupSuggestions("tagsInput", "tagSuggestions", "tags");
 setupSuggestions("relationshipsInput", "relationshipSuggestions", "relationships");
-
+setupSuggestions("includeTagsInput", "includeTagSuggestions", "tags");
+setupSuggestions("excludeTagsInput", "excludeTagSuggestions", "tags");
 
 
   
