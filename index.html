@@ -1,3 +1,4 @@
+
 <!-- Books yay-->
 <!doctype html>
 <!-- Canada yes -->
@@ -14,92 +15,131 @@
   <!-- Loads the colours, spacing, layout, and mobile styles from styles.css. -->
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <!-- Everything you can see -->
   <!-- Top bar: brand button, backup controls, and the Add a fic button. -->
   <header class="topbar">
     <button class="brand" id="homeBtn" aria-label="Go to Berry’s Archive library">
-
-
       <img
-    class="brand-mark"
-    src="logo.png"
-    alt="Berry's Archive logo"
-    >
+        class="brand-mark"
+        src="logo.png"
+        alt="Berry's Archive logo"
+      >
       <span><strong>Berry's Archive</strong></span>
     </button>
+
     <div class="top-actions">
-      <button class="button button-quiet" id="backupBtn" title="Export a backup">Export backup</button>
-      <label class="button button-quiet file-label" for="backupInput">Import backup</label>
+      <button class="button button-quiet" id="backupBtn" title="Export a backup">
+        Export backup
+      </button>
+
+      <label class="button button-quiet file-label" for="backupInput">
+        Import backup
+      </label>
+
       <input id="backupInput" type="file" accept=".json,application/json" hidden>
-      <button class="button button-primary" id="addBtn"><span aria-hidden="true">＋</span> Add a fic</button>
+
+      <button class="button button-primary" id="addBtn">
+        <span aria-hidden="true">＋</span> Add a fic
+      </button>
     </div>
   </header>
 
   <!-- Main area switches between the bookshelf and the story reader. -->
   <main>
-    <!-- search, filters, story cards, and footer. -->
+    <!-- LIBRARY VIEW -->
     <section id="libraryView" class="view">
-     
-
-
 
       <!-- Search, reading-status filter, sort menu, and story count. -->
       <section class="library-tools" aria-label="Search and filter your library">
-        <label class="search-wrap"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search titles, authors, tags…" autocomplete="off"></label>
+
+        <label class="search-wrap">
+          <span aria-hidden="true">⌕</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search titles, authors, tags…"
+            autocomplete="off"
+          >
+        </label>
+
         <div class="filter-row">
 
+          <!-- Relationship dropdown -->
+          <label class="select-wrap">
+            <span class="sr-only">Filter by relationship</span>
+            <select id="relationshipFilter">
+              <option value="">All relationships</option>
+            </select>
+          </label>
 
+          <!-- Reading status -->
+          <label class="select-wrap">
+            <span class="sr-only">Filter by status</span>
+            <select id="statusFilter">
+              <option value="all">All fics</option>
+              <option value="unread">Unread</option>
+              <option value="reading">In progress</option>
+              <option value="read">Finished</option>
+              <option value="bookmarked">Bookmarked</option>
+            </select>
+          </label>
 
-<label class="select-wrap">
-  <span class="sr-only">Filter by relationship</span>
-  <select id="relationshipFilter">
-    <option value="">All relationships</option>
-  </select>
-</label>
+          <!-- Sort -->
+          <label class="select-wrap">
+            <span class="sr-only">Sort library</span>
+            <select id="sortSelect">
+              <option value="added">Recently added</option>
+              <option value="updated">Recently updated</option>
+              <option value="opened">Recently opened</option>
+              <option value="title">Title A–Z</option>
+              <option value="titleDesc">Title Z–A</option>
+              <option value="author">Author A–Z</option>
+              <option value="authorDesc">Author Z–A</option>
+              <option value="words">Word count: high to low</option>
+              <option value="wordsAsc">Word count: low to high</option>
+            </select>
+          </label>
 
-
-
-
-          <label class="select-wrap"><span class="sr-only">Filter by status</span><select id="statusFilter"><option value="all">All fics</option><option value="unread">Unread</option><option value="reading">In progress</option><option value="read">Finished</option><option value="bookmarked">Bookmarked</option></select></label>
-          <label class="select-wrap"><span class="sr-only">Sort library</span><select id="sortSelect">
-  <option value="added">Recently added</option>
-  <option value="updated">Recently updated</option>
-  <option value="opened">Recently opened</option>
-  <option value="title">Title A–Z</option>
-  <option value="titleDesc">Title Z–A</option>
-  <option value="author">Author A–Z</option>
-  <option value="authorDesc">Author Z–A</option>
-  <option value="words">Word count: high to low</option>
-  <option value="wordsAsc">Word count: low to high</option>
-</select></label>
           <span class="library-count" id="libraryCount">0 stories</span>
         </div>
+
+        <!-- ADVANCED FILTERS -->
         <details class="advanced-filters">
           <summary>Advanced filters</summary>
+
           <div class="form-grid advanced-filter-grid">
 
-
-
-
-            
+            <!-- Keyword search -->
             <label class="field field-wide">
-  Search keywords
-  <span class="field-hint">Search titles, tags, and summaries</span>
-  <input id="keywordSearchInput" type="search" placeholder="Type a word or phrase...">
-</label>
+              Search keywords
+              <span class="field-hint">Search titles, tags, and summaries</span>
+              <input
+                id="keywordSearchInput"
+                type="search"
+                placeholder="Type a word or phrase..."
+              >
+            </label>
 
-
-
-
-            
+            <!-- Include tags -->
             <label class="field field-wide">
               Include tags
               <span class="field-hint">Separate tags with commas</span>
-              <input id="includeTagsInput" type="text" placeholder="Fluff, Angst, Slow Burn">
-              <span id="includeTagSuggestions" class="autocomplete-list" hidden></span>
+              <input
+                id="includeTagsInput"
+                type="text"
+                autocomplete="off"
+                placeholder="Fluff, Angst, Slow Burn"
+              >
+              <span
+                id="includeTagSuggestions"
+                class="autocomplete-list"
+                hidden
+              ></span>
             </label>
-            
+
+            <!-- Tag matching -->
             <label class="field">
               Match included tags
               <select id="tagMatchMode">
@@ -107,17 +147,44 @@
                 <option value="all">All selected tags</option>
               </select>
             </label>
+
+            <!-- Exclude tags -->
             <label class="field field-wide">
               Exclude tags
               <span class="field-hint">Hide stories with any of these tags</span>
-              <input id="excludeTagsInput" type="text" placeholder="Major Character Death, Underage">
-              <span id="excludeTagSuggestions" class="autocomplete-list" hidden></span>
+              <input
+                id="excludeTagsInput"
+                type="text"
+                autocomplete="off"
+                placeholder="Major Character Death, Underage"
+              >
+              <span
+                id="excludeTagSuggestions"
+                class="autocomplete-list"
+                hidden
+              ></span>
             </label>
+
+            <!-- RELATIONSHIP SEARCH WITH AUTOCOMPLETE -->
             <label class="field field-wide">
               Relationships
               <span class="field-hint">Separate relationships with commas</span>
-              <input id="relationshipSearchInput" type="text" placeholder="Character A/Character B, Character C & Character D">
+
+              <input
+                id="relationshipSearchInput"
+                type="text"
+                autocomplete="off"
+                placeholder="Start typing a relationship..."
+              >
+
+              <span
+                id="relationshipSearchSuggestions"
+                class="autocomplete-list"
+                hidden
+              ></span>
             </label>
+
+            <!-- Relationship matching -->
             <label class="field">
               Match relationships
               <select id="relationshipMatchMode">
@@ -125,123 +192,386 @@
                 <option value="all">All selected relationships</option>
               </select>
             </label>
+
+            <!-- Word count filters -->
             <label class="field">
               Minimum words
-              <input id="minWordsInput" type="number" min="0" step="1" placeholder="No minimum">
+              <input
+                id="minWordsInput"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="No minimum"
+              >
             </label>
+
             <label class="field">
               Maximum words
-              <input id="maxWordsInput" type="number" min="0" step="1" placeholder="No maximum">
+              <input
+                id="maxWordsInput"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="No maximum"
+              >
             </label>
+
           </div>
         </details>
       </section>
 
-      <!-- The collection grid is filled in by JavaScript. -->
+      <!-- BOOKSHELF -->
       <section class="library-section">
-        <div class="section-heading"><div><h2>Books</h2></div><button class="text-button" id="clearFiltersBtn">Clear filters</button></div>
+        <div class="section-heading">
+          <div>
+            <h2>Books</h2>
+          </div>
+
+          <button class="text-button" id="clearFiltersBtn">
+            Clear filters
+          </button>
+        </div>
+
         <div id="ficGrid" class="fic-grid"></div>
+
         <div id="emptyState" class="empty-state">
-          <div class="empty-icon">ᓚᘏᗢ</div><h3>Your shelf is waiting.</h3>
-          <p>Add a fic by pasting its HTML or importing a file from your device.</p>
-          <button class="button button-primary" id="emptyAddBtn">Add your first fic</button>
+          <div class="empty-icon">ᓚᘏᗢ</div>
+          <h3>Your shelf is waiting.</h3>
+
+          <p>
+            Add a fic by pasting its HTML or importing a file from your device.
+          </p>
+
+          <button class="button button-primary" id="emptyAddBtn">
+            Add your first fic
+          </button>
         </div>
       </section>
-      <footer class="site-footer"><span><span class="offline-dot"></span> Offline · stored on this device</span></footer>
+
+      <footer class="site-footer">
+        <span>
+          <span class="offline-dot"></span>
+          Offline · stored on this device
+        </span>
+      </footer>
     </section>
 
-    <!-- READER VIEW: details for the selected fic and its chapter text. -->
+    <!-- READER VIEW -->
     <section id="readerView" class="view hidden">
       <div class="reader-toolbar">
-        <button class="text-button" id="backBtn">← Back to library</button>
-        <div class="reader-actions"><button class="button button-quiet" id="editFicBtn">Edit details</button><button class="icon-button" id="readerBookmarkBtn" aria-label="Toggle bookmark" title="Bookmark">♡</button></div>
+        <button class="text-button" id="backBtn">
+          ← Back to library
+        </button>
+
+        <div class="reader-actions">
+          <button class="button button-quiet" id="editFicBtn">
+            Edit details
+          </button>
+
+          <button
+            class="icon-button"
+            id="readerBookmarkBtn"
+            aria-label="Toggle bookmark"
+            title="Bookmark"
+          >♡</button>
+        </div>
       </div>
+
       <article class="reader">
         <div class="reader-heading">
           <p class="eyebrow" id="readerFandom"></p>
           <h1 id="readerTitle"></h1>
           <p class="reader-author" id="readerAuthor"></p>
+
           <div id="readerBadges" class="badge-row"></div>
           <div class="reader-stats" id="readerStats"></div>
           <p class="reader-summary" id="readerSummary"></p>
           <div class="tag-list" id="readerTags"></div>
-          <div class="reader-progress-row"><span id="readStatusLabel">Unread</span><button class="text-button" id="toggleReadBtn">Mark as finished ✓</button></div>
+
+          <div class="reader-progress-row">
+            <span id="readStatusLabel">Unread</span>
+            <button class="text-button" id="toggleReadBtn">
+              Mark as finished ✓
+            </button>
+          </div>
+
+          <!-- Chapter navigation -->
           <div id="chapterNavigation" class="chapter-navigation hidden">
-            <label class="chapter-picker-label" for="chapterPicker">Chapter</label>
+            <label class="chapter-picker-label" for="chapterPicker">
+              Chapter
+            </label>
+
             <select id="chapterPicker" aria-label="Choose chapter"></select>
-            <div class="chapter-nav-buttons"><button class="button button-quiet" id="prevChapterBtn">← Previous</button><span id="chapterPosition"></span><button class="button button-quiet" id="nextChapterBtn">Next →</button></div>
+
+            <div class="chapter-nav-buttons">
+              <button class="button button-quiet" id="prevChapterBtn">
+                ← Previous
+              </button>
+
+              <span id="chapterPosition"></span>
+
+              <button class="button button-quiet" id="nextChapterBtn">
+                Next →
+              </button>
+            </div>
           </div>
         </div>
+
         <div class="fic-content" id="ficContent"></div>
-        <div id="bottomChapterNavigation" class="bottom-chapter-navigation hidden"><button class="button button-quiet" id="prevChapterBottomBtn">← Previous chapter</button><button class="button button-quiet" id="nextChapterBottomBtn">Next chapter →</button></div>
-        <div class="reader-end"><p>The End</p><button class="button button-quiet" id="readerBackBottom">To story list</button></div>
+
+        <!-- Bottom chapter navigation -->
+        <div
+          id="bottomChapterNavigation"
+          class="bottom-chapter-navigation hidden"
+        >
+          <button class="button button-quiet" id="prevChapterBottomBtn">
+            ← Previous chapter
+          </button>
+
+          <button class="button button-quiet" id="nextChapterBottomBtn">
+            Next chapter →
+          </button>
+        </div>
+
+        <div class="reader-end">
+          <p>The End</p>
+
+          <button class="button button-quiet" id="readerBackBottom">
+            To story list
+          </button>
+        </div>
       </article>
     </section>
   </main>
 
-  <!-- ADD / EDIT DIALOG: the form used to save a fic and its chapters. -->
+  <!-- ADD / EDIT STORY DIALOG -->
   <dialog id="ficDialog" class="fic-dialog">
     <form id="ficForm">
-      <div class="dialog-heading"><div><h2 id="dialogTitle">Add fic</h2></div><button type="button" class="icon-button" id="closeDialogBtn" aria-label="Close">×</button></div>
-      <input type="hidden" id="ficId">
-      <!-- Story metadata fields such as title, author, fandom, tags, and summary. -->
-      <div class="form-grid">
-        <label class="field field-wide">Title <span class="required">*</span><input id="titleInput" required maxlength="240" placeholder="The name of the story"></label>
-        <label class="field">Author<input id="authorInput" maxlength="160" placeholder="Author name or pseud"></label>
-        <label class="field">Fandom / universe<input id="fandomInput" maxlength="200" placeholder="Fandom, series, or original"></label>
-        <label class="field">Rating
-          <select id="ratingInput"><option>Not rated</option><option>General audiences</option><option>Teen and up</option><option>Mature</option><option>Explicit</option><option>Creator chose not to rate</option></select>
-        </label>
-        <label class="field">Word count <input id="wordsInput" type="number" min="0" step="1" placeholder="Optional"></label>
-        <label class="field field-wide">
-            Tags
-            <span class="field-hint">Separate with commas</span>
-             <input id="tagsInput" autocomplete="off" placeholder="Start typing a tag...">
-              <span id="tagSuggestions" class="autocomplete-list" hidden></span>
-          </label>
-        
-           <label class="field field-wide">
-        Relationships
-        <span class="field-hint">Separate with commas</span>
-        <input id="relationshipsInput" autocomplete="off" placeholder="Start typing a ship...">
-      <span id="relationshipSuggestions" class="autocomplete-list" hidden></span>
-    </label>
-        
 
+      <div class="dialog-heading">
+        <div>
+          <h2 id="dialogTitle">Add fic</h2>
+        </div>
 
-        
-        <label class="field field-wide">Summary<textarea id="summaryInput" rows="3" maxlength="1500" placeholder="A little note to future you…"></textarea></label>
+        <button
+          type="button"
+          class="icon-button"
+          id="closeDialogBtn"
+          aria-label="Close"
+        >×</button>
       </div>
-      <!-- Import area: choose a file or enter story content chapter by chapter. -->
+
+      <input type="hidden" id="ficId">
+
+      <!-- Story details -->
+      <div class="form-grid">
+
+        <label class="field field-wide">
+          Title <span class="required">*</span>
+          <input
+            id="titleInput"
+            required
+            maxlength="240"
+            placeholder="The name of the story"
+          >
+        </label>
+
+        <label class="field">
+          Author
+          <input
+            id="authorInput"
+            maxlength="160"
+            placeholder="Author name or pseud"
+          >
+        </label>
+
+        <label class="field">
+          Fandom / universe
+          <input
+            id="fandomInput"
+            maxlength="200"
+            placeholder="Fandom, series, or original"
+          >
+        </label>
+
+        <label class="field">
+          Rating
+          <select id="ratingInput">
+            <option>Not rated</option>
+            <option>General audiences</option>
+            <option>Teen and up</option>
+            <option>Mature</option>
+            <option>Explicit</option>
+            <option>Creator chose not to rate</option>
+          </select>
+        </label>
+
+        <label class="field">
+          Word count
+          <input
+            id="wordsInput"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="Optional"
+          >
+        </label>
+
+        <!-- Story tags -->
+        <label class="field field-wide">
+          Tags
+          <span class="field-hint">Separate with commas</span>
+
+          <input
+            id="tagsInput"
+            autocomplete="off"
+            placeholder="Start typing a tag..."
+          >
+
+          <span
+            id="tagSuggestions"
+            class="autocomplete-list"
+            hidden
+          ></span>
+        </label>
+
+        <!-- Story relationships -->
+        <label class="field field-wide">
+          Relationships
+          <span class="field-hint">Separate with commas</span>
+
+          <input
+            id="relationshipsInput"
+            autocomplete="off"
+            placeholder="Start typing a ship..."
+          >
+
+          <span
+            id="relationshipSuggestions"
+            class="autocomplete-list"
+            hidden
+          ></span>
+        </label>
+
+        <label class="field field-wide">
+          Summary
+          <textarea
+            id="summaryInput"
+            rows="3"
+            maxlength="1500"
+            placeholder="A little note to future you…"
+          ></textarea>
+        </label>
+
+      </div>
+
+      <!-- Story content -->
       <div class="content-source">
-        <div class="source-heading"><div><h3>The story itself</h3><p>Paste HTML, or choose an HTML / text file below.</p></div><label class="button button-quiet file-label" for="ficFileInput">Choose file</label><input id="ficFileInput" type="file" accept=".html,.htm,.xhtml,.txt,text/html,text/plain,application/xhtml+xml" hidden></div>
+        <div class="source-heading">
+          <div>
+            <h3>The story itself</h3>
+            <p>
+              Paste HTML, or choose an HTML / text file below.
+            </p>
+          </div>
+
+          <label
+            class="button button-quiet file-label"
+            for="ficFileInput"
+          >
+            Choose file
+          </label>
+
+          <input
+            id="ficFileInput"
+            type="file"
+            accept=".html,.htm,.xhtml,.txt,text/html,text/plain,application/xhtml+xml"
+            hidden
+          >
+        </div>
+
         <div id="fileName" class="file-name"></div>
-        <!-- Chapter editor lets you add, rename, reorder, and edit chapters. -->
+
+        <!-- Chapter editor -->
         <div class="chapter-editor">
           <div class="chapter-editor-top">
-            <div><h4>Chapters</h4><p>Add a single-chapter story or split a longer fic into chapters.</p></div>
-            <button type="button" class="button button-quiet" id="addChapterBtn">＋ Add chapter</button>
+            <div>
+              <h4>Chapters</h4>
+              <p>
+                Add a single-chapter story or split a longer fic into chapters.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="button button-quiet"
+              id="addChapterBtn"
+            >
+              ＋ Add chapter
+            </button>
           </div>
+
           <div id="chapterEditorList" class="chapter-editor-list"></div>
-          <p class="privacy-note">Each chapter can contain pasted HTML or plain text. You can reorder chapters and edit their titles.</p>
+
+          <p class="privacy-note">
+            Each chapter can contain pasted HTML or plain text.
+            You can reorder chapters and edit their titles.
+          </p>
         </div>
-        <p class="privacy-note">Your stories stay in this browser on this device. Imported HTML is cleaned before it is displayed.</p>
+
+        <p class="privacy-note">
+          Your stories stay in this browser on this device.
+          Imported HTML is cleaned before it is displayed.
+        </p>
       </div>
-      <!-- Form actions: cancel changes or save the fic to the library. -->
-      <div class="dialog-footer"><button type="button" class="button button-quiet" id="cancelDialogBtn">Cancel</button><button type="submit" class="button button-primary">Save to my library</button></div>
+
+      <!-- Form actions -->
+      <div class="dialog-footer">
+        <button
+          type="button"
+          class="button button-quiet"
+          id="cancelDialogBtn"
+        >
+          Cancel
+        </button>
+
+        <button type="submit" class="button button-primary">
+          Save to my library
+        </button>
+      </div>
+
     </form>
   </dialog>
-  <!-- Short messages such as “Saved” appear here. JavaScript controls visibility. -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <!-- Loads the JavaScript that makes buttons, importing, reading, and saving work. -->
+
+  <!-- Status messages -->
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <!-- JavaScript -->
   <script src="app.js"></script>
+
   <script>
     // Register offline support when served from HTTPS or localhost.
-    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    if (
+      "serviceWorker" in navigator &&
+      (
+        location.protocol === "https:" ||
+        location.hostname === "localhost"
+      )
+    ) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js").catch(err => {
-          console.warn("Offline support could not be enabled:", err);
-        });
+        navigator.serviceWorker
+          .register("./service-worker.js")
+          .catch(err => {
+            console.warn(
+              "Offline support could not be enabled:",
+              err
+            );
+          });
       });
     }
   </script>
