@@ -235,7 +235,9 @@ const list = visibleFics();
 $("libraryCount").textContent =
   `${list.length} ${list.length === 1 ? "story" : "stories"}`;
     $("ficGrid").innerHTML = list.map(f => {
-      const tags = (f.tags || []).slice(0, 3).map(t => `<span class="tag">${escapeHTML(t)}</span>`).join("");
+      const tags = (f.tags || []).slice(0, 3).map(t =>
+  `<span class="tag" data-filter-tag="${escapeHTML(t)}">${escapeHTML(t)}</span>`
+).join("");
       const summary = f.summary ? `<p class="card-summary">${escapeHTML(f.summary)}</p>` : "";
      // Automatically counts words across all chapters.
 const chapters = normaliseChapters(f);
@@ -578,6 +580,19 @@ function parseTags(value) {
 
  
 $("ficGrid").addEventListener("click", async e => {
+
+   // Clicking a tag filters the bookshelf by that tag.
+  const clickedTag = e.target.closest("[data-filter-tag]");
+
+  if (clickedTag) {
+    e.stopPropagation();
+
+    $("includeTagsInput").value = clickedTag.dataset.filterTag;
+    $("tagMatchMode").value = "any";
+
+    renderLibrary();
+    return;
+  }
   // Handle the Delete Fic button first.
   const deleteButton = e.target.closest("[data-delete]");
 
