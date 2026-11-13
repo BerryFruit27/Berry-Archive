@@ -97,7 +97,9 @@
               Include tags
               <span class="field-hint">Separate tags with commas</span>
               <input id="includeTagsInput" type="text" placeholder="Fluff, Angst, Slow Burn">
+              <span id="includeTagSuggestions" class="autocomplete-list" hidden></span>
             </label>
+            
             <label class="field">
               Match included tags
               <select id="tagMatchMode">
@@ -109,6 +111,7 @@
               Exclude tags
               <span class="field-hint">Hide stories with any of these tags</span>
               <input id="excludeTagsInput" type="text" placeholder="Major Character Death, Underage">
+              <span id="excludeTagSuggestions" class="autocomplete-list" hidden></span>
             </label>
             <label class="field field-wide">
               Relationships
