@@ -243,6 +243,11 @@ const tags = (f.tags || []).map(t =>
   `<span class="tag" data-filter-tag="${escapeHTML(t)}">${escapeHTML(t)}</span>`
 ).join("");
 
+// Creates clickable relationship tags.
+const relationshipTags = (f.relationships || []).map(relationship =>
+  `<span class="tag" data-filter-relationship="${escapeHTML(relationship)}">${escapeHTML(relationship)}</span>`
+).join("");
+      
 const summary = f.summary
   ? `<p class="card-summary" ${expanded ? 'style="display:block;overflow:visible;max-height:none;-webkit-line-clamp:unset;"' : ""}>${escapeHTML(f.summary)}</p>`
   : "";
@@ -295,6 +300,7 @@ const chapterCount = chapters.length;
         <h3>${escapeHTML(f.title)}</h3><p class="card-author">${f.author ? "by " + escapeHTML(f.author) : "Author unknown"}</p>
        ${summary}
 <div class="tag-list">${tags}</div>
+<div class="tag-list">${relationshipTags}</div>
 
 ${(f.tags || []).length > 3 || (f.summary || "").length > 180 ? `
   <button class="expand-card-btn" data-expand="${escapeHTML(f.id)}" type="button">
@@ -596,6 +602,18 @@ function parseTags(value) {
 
  
 $("ficGrid").addEventListener("click", async e => {
+
+  // Clicking a relationship filters the bookshelf.
+const clickedRelationship = e.target.closest("[data-filter-relationship]");
+
+if (clickedRelationship) {
+  e.stopPropagation();
+
+  $("relationshipFilter").value = clickedRelationship.dataset.filterRelationship;
+
+  renderLibrary();
+  return;
+}
 
   const expandButton = e.target.closest("[data-expand]");
 
