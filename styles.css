@@ -441,7 +441,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     color: #655a55;
     margin: 0 0 15px;
     display: -webkit-box;
-    -webkit-line-clamp: 7;
+    -webkit-line-clamp: 8;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
