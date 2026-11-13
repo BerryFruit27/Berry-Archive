@@ -296,9 +296,11 @@ const chapterCount = chapters.length;
        ${summary}
 <div class="tag-list">${tags}</div>
 
-<button class="expand-card-btn" data-expand="${escapeHTML(f.id)}" type="button">
-  ${expanded ? "Show less ▲" : "Show more ▼"}
-</button>
+${(f.tags || []).length > 3 || (f.summary || "").length > 180 ? `
+  <button class="expand-card-btn" data-expand="${escapeHTML(f.id)}" type="button">
+    ${expanded ? "Show less ▲" : "Show more ▼"}
+  </button>
+` : ""}
         <div class="card-bottom"><span>${formatNumber(words)} words · ${chapterCount} ${chapterCount === 1 ? "chapter" : "chapters"} · ${dateLabel(f.createdAt)}</span><span class="status-pill ${f.read ? "read" : ""}">${statusText(f)}</span></div>
       </article>`;
     }).join("");
