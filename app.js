@@ -421,12 +421,12 @@
 
           ${summary}
 
-         <div class="tag-list relationship-tag-list">
-              ${relationshipTags}
-              </div>
+           <div class="tag-list relationship-tag-list">
+            ${relationshipTags}
+          </div>
 
-             <div class="tag-list">
-                 ${tags}
+          <div class="tag-list">
+            ${tags}
           </div>
 
           ${showExpandButton ? `
