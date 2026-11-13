@@ -421,8 +421,13 @@
 
           ${summary}
 
-          <div class="tag-list">${tags}</div>
-          <div class="tag-list">${relationshipTags}</div>
+         <div class="tag-list relationship-tag-list">
+              ${relationshipTags}
+              </div>
+
+             <div class="tag-list">
+                 ${tags}
+          </div>
 
           ${showExpandButton ? `
             <button
@@ -1041,6 +1046,30 @@
   // CLICKING STORY CARDS, TAGS, AND RELATIONSHIPS
 
   $("ficGrid").addEventListener("click", async event => {
+
+$("ficGrid").addEventListener("click", async event => {
+
+  // Clicking a relationship filters the bookshelf.
+  const clickedRelationship = event.target.closest(
+    "[data-filter-relationship]"
+  );
+
+  if (clickedRelationship) {
+    event.stopPropagation();
+
+    $("relationshipFilter").value = "";
+    $("relationshipSearchInput").value =
+      clickedRelationship.dataset.filterRelationship;
+
+    $("relationshipMatchMode").value = "any";
+
+    renderLibrary();
+    return;
+  }
+
+  const expandButton = event.target.closest("[data-expand]");
+
+    
     const clickedRelationship = event.target.closest(
       "[data-filter-relationship]"
     );
