@@ -239,7 +239,7 @@ $("libraryCount").textContent =
     $("ficGrid").innerHTML = list.map(f => {
       const expanded = expandedCards.has(f.id);
 
-const tags = (expanded ? (f.tags || []) : (f.tags || []).slice(0, 3)).map(t =>
+const tags = (f.tags || []).map(t =>
   `<span class="tag" data-filter-tag="${escapeHTML(t)}">${escapeHTML(t)}</span>`
 ).join("");
 
@@ -254,7 +254,7 @@ const words = chapters.reduce((total, chapter) => {
 }, 0);
 
 const chapterCount = chapters.length;
-      return `<article class="fic-card" tabindex="0" role="button" data-open="${escapeHTML(f.id)}" aria-label="Read ${escapeHTML(f.title)}">
+      return `<article class="fic-card ${expanded ? "expanded" : ""}" tabindex="0" role="button" data-open="${escapeHTML(f.id)}" aria-label="Read ${escapeHTML(f.title)}">
         
       
       
