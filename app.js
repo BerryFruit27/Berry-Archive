@@ -210,6 +210,8 @@ if (selectedRelationship) {
 
 
   // Draws the story cards and empty-state message on the bookshelf.
+
+  const expandedCards = new Set();
   function renderLibrary() {
   const relationshipFilter = $("relationshipFilter");
   const selectedRelationship = relationshipFilter.value;
@@ -235,10 +237,15 @@ const list = visibleFics();
 $("libraryCount").textContent =
   `${list.length} ${list.length === 1 ? "story" : "stories"}`;
     $("ficGrid").innerHTML = list.map(f => {
-      const tags = (f.tags || []).slice(0, 3).map(t =>
+      const expanded = expandedCards.has(f.id);
+
+const tags = (expanded ? (f.tags || []) : (f.tags || []).slice(0, 3)).map(t =>
   `<span class="tag" data-filter-tag="${escapeHTML(t)}">${escapeHTML(t)}</span>`
 ).join("");
-      const summary = f.summary ? `<p class="card-summary">${escapeHTML(f.summary)}</p>` : "";
+
+const summary = f.summary
+  ? `<p class="card-summary" ${expanded ? 'style="display:block;overflow:visible;max-height:none;-webkit-line-clamp:unset;"' : ""}>${escapeHTML(f.summary)}</p>`
+  : "";
      // Automatically counts words across all chapters.
 const chapters = normaliseChapters(f);
 
@@ -286,7 +293,12 @@ const chapterCount = chapters.length;
 
 
         <h3>${escapeHTML(f.title)}</h3><p class="card-author">${f.author ? "by " + escapeHTML(f.author) : "Author unknown"}</p>
-        ${summary}<div class="tag-list">${tags}</div>
+       ${summary}
+<div class="tag-list">${tags}</div>
+
+<button class="expand-card-btn" data-expand="${escapeHTML(f.id)}" type="button">
+  ${expanded ? "Show less ▲" : "Show more ▼"}
+</button>
         <div class="card-bottom"><span>${formatNumber(words)} words · ${chapterCount} ${chapterCount === 1 ? "chapter" : "chapters"} · ${dateLabel(f.createdAt)}</span><span class="status-pill ${f.read ? "read" : ""}">${statusText(f)}</span></div>
       </article>`;
     }).join("");
@@ -580,6 +592,23 @@ function parseTags(value) {
 
  
 $("ficGrid").addEventListener("click", async e => {
+
+  const expandButton = e.target.closest("[data-expand]");
+
+if (expandButton) {
+  e.stopPropagation();
+
+  const ficId = expandButton.dataset.expand;
+
+  if (expandedCards.has(ficId)) {
+    expandedCards.delete(ficId);
+  } else {
+    expandedCards.add(ficId);
+  }
+
+  renderLibrary();
+  return;
+}
 
    // Clicking a tag filters the bookshelf by that tag.
   const clickedTag = e.target.closest("[data-filter-tag]");
