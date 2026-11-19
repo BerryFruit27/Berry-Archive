@@ -480,6 +480,55 @@
 
   // READER
 
+ // SERIES NAVIGATION
+
+  function updateSeriesNavigation(fic) {
+    const navigation = $("seriesNavigation");
+
+    if (!fic.series) {
+      navigation.classList.add("hidden");
+      return;
+    }
+
+    const seriesStories = state.fics
+      .filter(story =>
+        (story.series || "").trim().toLocaleLowerCase("en-CA") ===
+        fic.series.trim().toLocaleLowerCase("en-CA")
+      )
+      .sort((first, second) =>
+        (Number(first.seriesPosition) || 1) -
+        (Number(second.seriesPosition) || 1)
+      );
+
+    const index = seriesStories.findIndex(story => story.id === fic.id);
+
+    $("seriesLabel").textContent =
+      `Part ${fic.seriesPosition || 1} of ${fic.series}`;
+
+    const previousButton = $("previousSeriesBtn");
+    const nextButton = $("nextSeriesBtn");
+
+    previousButton.disabled = index <= 0;
+    nextButton.disabled = index >= seriesStories.length - 1;
+
+    previousButton.onclick = () => {
+      if (index > 0) {
+        currentChapterIndex = 0;
+        openReader(seriesStories[index - 1].id);
+      }
+    };
+
+    nextButton.onclick = () => {
+      if (index < seriesStories.length - 1) {
+        currentChapterIndex = 0;
+        openReader(seriesStories[index + 1].id);
+      }
+    };
+
+    navigation.classList.remove("hidden");
+  }
+
+ 
   function showLibrary() {
     $("libraryView").classList.remove("hidden");
     $("readerView").classList.add("hidden");
@@ -507,6 +556,7 @@
 
     $("readerAuthor").textContent =
       fic.author ? `by ${fic.author}` : "Author unknown";
+   updateSeriesNavigation(fic);
 
     $("readerBadges").innerHTML =
       `<span class="badge">${escapeHTML(fic.rating || "Not rated")}</span>` +
@@ -718,8 +768,11 @@
     $("relationshipsInput").value =
       (fic?.relationships || []).join(", ");
 
-    $("summaryInput").value = fic?.summary || "";
+    // Load series information when editing a fic.
+    $("seriesInput").value = fic?.series || "";
+    $("seriesPositionInput").value = fic?.seriesPosition || "";
 
+    $("summaryInput").value = fic?.summary || "";
     draftChapters = normaliseChapters(fic);
 
     renderChapterEditor();
@@ -1363,8 +1416,15 @@
         Number.parseInt($("wordsInput").value, 10) || totalWords
       ),
 
-      tags: parseTags($("tagsInput").value),
+     tags: parseTags($("tagsInput").value),
       relationships: parseTags($("relationshipsInput").value),
+
+      // Optional series information.
+      series: $("seriesInput").value.trim(),
+      seriesPosition: $("seriesInput").value.trim()
+        ? Math.max(1, Number.parseInt($("seriesPositionInput").value, 10) || 1)
+        : null,
+
       summary: $("summaryInput").value.trim(),
       chapters,
 
