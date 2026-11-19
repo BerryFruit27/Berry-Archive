@@ -283,6 +283,28 @@
           <h1 id="readerTitle"></h1>
           <p class="reader-author" id="readerAuthor"></p>
 
+          <div id="seriesNavigation" class="series-navigation hidden">
+  <p id="seriesLabel"></p>
+
+  <div class="series-buttons">
+    <button
+      type="button"
+      id="previousSeriesBtn"
+      class="button button-quiet"
+    >
+      ← Previous Work
+    </button>
+
+    <button
+      type="button"
+      id="nextSeriesBtn"
+      class="button button-quiet"
+    >
+      Next Work →
+    </button>
+  </div>
+</div>
+
           <div id="readerBadges" class="badge-row"></div>
           <div class="reader-stats" id="readerStats"></div>
           <p class="reader-summary" id="readerSummary"></p>
@@ -452,6 +474,31 @@
             hidden
           ></span>
         </label>
+
+
+        <!-- Series information -->
+<label class="field">
+  Series name
+  <input
+    id="seriesInput"
+    type="text"
+    maxlength="200"
+    placeholder="Example: Sonic Adventures"
+  >
+</label>
+
+<label class="field">
+  Part in series
+  <input
+    id="seriesPositionInput"
+    type="number"
+    min="1"
+    step="1"
+    placeholder="Example: 1"
+  >
+</label>
+
+        
 
         <label class="field field-wide">
           Summary
