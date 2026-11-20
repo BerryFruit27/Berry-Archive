@@ -416,9 +416,17 @@
           <h3>${escapeHTML(fic.title)}</h3>
 
           <p class="card-author">
-            ${fic.author ? "by " + escapeHTML(fic.author) : "Author unknown"}
-          </p>
-
+  ${fic.author ? `
+    by
+    <button
+      type="button"
+      class="author-tag"
+      data-open-author="${escapeHTML(fic.author)}"
+    >
+      ${escapeHTML(fic.author)}
+    </button>
+  ` : "Author unknown"}
+</p>
           ${summary}
 
            <div class="tag-list relationship-tag-list">
@@ -547,6 +555,7 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
   // SHOW ALL BOOKS IN A SERIES
 
   function showSeries(seriesName) {
+   $("authorView").classList.add("hidden");
     const books = state.fics
       .filter(fic =>
         (fic.series || "").trim().toLocaleLowerCase("en-CA") ===
@@ -603,9 +612,18 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
 
           <h3>${escapeHTML(fic.title)}</h3>
 
-          <p class="card-author">
-            ${fic.author ? "by " + escapeHTML(fic.author) : "Author unknown"}
-          </p>
+<p class="card-author">
+  ${fic.author ? `
+    by
+    <button
+      type="button"
+      class="author-tag"
+      data-open-author="${escapeHTML(fic.author)}"
+    >
+      ${escapeHTML(fic.author)}
+    </button>
+  ` : "Author unknown"}
+</p>
 
           ${fic.summary ? `
             <p class="card-summary">
@@ -646,9 +664,122 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
 
     window.scrollTo(0, 0);
   }
+// SHOW ALL BOOKS BY AN AUTHOR
 
+function showAuthor(authorName) {
+  const books = state.fics
+    .filter(fic =>
+      (fic.author || "").trim().toLocaleLowerCase("en-CA") ===
+      authorName.trim().toLocaleLowerCase("en-CA")
+    )
+    .sort((first, second) =>
+      (second.createdAt || 0) - (first.createdAt || 0)
+    );
+
+  $("authorPageTitle").textContent = authorName;
+
+  $("authorBookCount").textContent =
+    `${books.length} ${books.length === 1 ? "book" : "books"} by this author`;
+
+  $("authorBookList").innerHTML = books.map(fic => {
+    const chapters = normaliseChapters(fic);
+
+    const words = chapters.reduce((total, chapter) =>
+      total + wordCount(chapter.content), 0
+    );
+
+    const relationships = (fic.relationships || []).map(relationship =>
+      `<span class="tag">${escapeHTML(relationship)}</span>`
+    ).join("");
+
+    const tags = (fic.tags || []).map(tag =>
+      `<span class="tag">${escapeHTML(tag)}</span>`
+    ).join("");
+
+    return `
+      <article
+        class="fic-card"
+        data-author-open="${escapeHTML(fic.id)}"
+        tabindex="0"
+        role="button"
+        aria-label="Read ${escapeHTML(fic.title)}"
+      >
+        <div class="card-top">
+          <span class="card-fandom">
+            ${escapeHTML(fic.fandom || "Uncategorised")}
+          </span>
+
+          <div class="card-actions">
+            <button
+              type="button"
+              class="card-bookmark"
+              data-author-bookmark="${escapeHTML(fic.id)}"
+              aria-label="${fic.bookmarked ? "Remove bookmark" : "Bookmark"}"
+            >${fic.bookmarked ? "♥" : "♡"}</button>
+          </div>
+        </div>
+
+        <h3>${escapeHTML(fic.title)}</h3>
+
+        <p class="card-author">
+          by
+          <span class="author-tag">
+            ${escapeHTML(fic.author)}
+          </span>
+        </p>
+
+        ${fic.summary ? `
+          <p class="card-summary">
+            ${escapeHTML(fic.summary)}
+          </p>
+        ` : ""}
+
+        <div class="tag-list relationship-tag-list">
+          ${relationships}
+        </div>
+
+        <div class="tag-list">
+          ${tags}
+        </div>
+
+        ${fic.series ? `
+          <div class="card-series">
+            <button
+              type="button"
+              class="text-button"
+              data-author-series="${escapeHTML(fic.series)}"
+            >
+              Series: ${escapeHTML(fic.series)}
+              (Part ${fic.seriesPosition || 1})
+            </button>
+          </div>
+        ` : ""}
+
+        <div class="card-bottom">
+          <span>
+            ${formatNumber(words)} words ·
+            ${chapters.length} ${chapters.length === 1 ? "chapter" : "chapters"} ·
+            ${dateLabel(fic.createdAt)}
+          </span>
+
+          <span class="status-pill ${fic.read ? "read" : ""}">
+            ${statusText(fic)}
+          </span>
+        </div>
+      </article>
+    `;
+  }).join("");
+  currentFicId = null;
+  $("libraryView").classList.add("hidden");
+  $("readerView").classList.add("hidden");
+  $("seriesView").classList.add("hidden");
+  $("authorView").classList.remove("hidden");
+
+  window.scrollTo(0, 0);
+}
  
   function showLibrary() {
+    $("authorView").classList.add("hidden");
     $("seriesView").classList.add("hidden");
     $("libraryView").classList.remove("hidden");
     $("readerView").classList.add("hidden");
@@ -660,6 +791,7 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
   }
 
   async function openReader(id) {
+   $("authorView").classList.add("hidden");
     const fic = state.fics.find(fic => fic.id === id);
     if (!fic) return;
    $("seriesView").classList.add("hidden");
@@ -1220,6 +1352,14 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
   // CLICKING STORY CARDS, TAGS, AND RELATIONSHIPS
 
    $("ficGrid").addEventListener("click", async event => {
+    // Open the author page.
+const clickedAuthor = event.target.closest("[data-open-author]");
+
+if (clickedAuthor) {
+  event.stopPropagation();
+  showAuthor(clickedAuthor.dataset.openAuthor);
+  return;
+}
 
 
        // Open the series page when its name is clicked.
@@ -1335,6 +1475,49 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
     }
   });
 
+
+ // AUTHOR PAGE BUTTONS
+
+$("authorBackBtn").addEventListener("click", showLibrary);
+
+$("authorBookList").addEventListener("click", async event => {
+
+  // Bookmark a book.
+  const bookmark = event.target.closest("[data-author-bookmark]");
+
+  if (bookmark) {
+    event.stopPropagation();
+    await toggleBookmark(bookmark.dataset.authorBookmark);
+    showAuthor($("authorPageTitle").textContent);
+    return;
+  }
+
+  // Open a series.
+  const series = event.target.closest("[data-author-series]");
+
+  if (series) {
+    event.stopPropagation();
+    showSeries(series.dataset.authorSeries);
+    return;
+  }
+
+  // Open a book.
+  const book = event.target.closest("[data-author-open]");
+
+  if (book) {
+    currentChapterIndex = 0;
+    await openReader(book.dataset.authorOpen);
+  }
+});
+
+$("authorBookList").addEventListener("keydown", async event => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  if (!event.target.matches("[data-author-open]")) return;
+
+  event.preventDefault();
+  currentChapterIndex = 0;
+  await openReader(event.target.dataset.authorOpen);
+});
 // SERIES PAGE BUTTONS
 
 $("seriesBackBtn").addEventListener("click", () => {
@@ -1348,6 +1531,15 @@ $("seriesBackBtn").addEventListener("click", () => {
 });
 
 $("seriesBookList").addEventListener("click", async event => {
+
+ // Open the author page from a series card.
+const clickedAuthor = event.target.closest("[data-open-author]");
+
+if (clickedAuthor) {
+  event.stopPropagation();
+  showAuthor(clickedAuthor.dataset.openAuthor);
+  return;
+}
 
   // Check whether the bookmark heart was clicked.
   const bookmark = event.target.closest("[data-series-bookmark]");
