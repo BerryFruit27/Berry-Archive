@@ -1682,3 +1682,47 @@ button.author-tag:focus-visible {
 .chapter-edit-card textarea.hidden {
   display: none;
 }
+
+
+
+/* AO3-STYLE STORY FORMATTING */
+
+.fic-content {
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Normal paragraph spacing */
+
+.fic-content p {
+  margin-top: 0 !important;
+  margin-bottom: 1em !important;
+
+  padding: 0 !important;
+  background-color: transparent !important;
+
+  line-height: inherit !important;
+}
+
+/* Keep bold and italics */
+
+.fic-content strong,
+.fic-content b {
+  font-weight: bold !important;
+}
+
+.fic-content em,
+.fic-content i {
+  font-style: italic !important;
+}
+
+/* AO3-style horizontal scene breaks */
+
+.fic-content hr {
+  border: none;
+  border-top: 1px solid #aaa;
+  width: 60%;
+  margin: 2em auto;
+}
+
+
