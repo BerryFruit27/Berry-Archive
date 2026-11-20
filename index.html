@@ -256,6 +256,29 @@
       </footer>
     </section>
 
+
+<!-- SERIES LIST VIEW -->
+<section id="seriesView" class="view hidden">
+
+  <button
+    type="button"
+    class="text-button"
+    id="seriesBackBtn"
+  >
+    ← Back
+  </button>
+
+  <div class="section-heading">
+    <h2 id="seriesPageTitle"></h2>
+  </div>
+
+  <p id="seriesBookCount"></p>
+
+  <div id="seriesBookList" class="fic-grid"></div>
+
+</section>
+
+    
     <!-- READER VIEW -->
     <section id="readerView" class="view hidden">
       <div class="reader-toolbar">
@@ -284,7 +307,15 @@
           <p class="reader-author" id="readerAuthor"></p>
 
           <div id="seriesNavigation" class="series-navigation hidden">
-  <p id="seriesLabel"></p>
+  <p>
+  Part <span id="seriesPartNumber"></span> of
+  <button
+    type="button"
+    id="seriesNameBtn"
+    class="text-button"
+    title="View all books in this series"
+  ></button>
+</p>
 
   <div class="series-buttons">
     <button
