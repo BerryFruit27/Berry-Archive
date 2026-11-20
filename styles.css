@@ -1544,3 +1544,32 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   padding: 0;
   text-decoration: underline;
 }
+
+
+/* CLICKABLE AUTHOR TAGS */
+
+.author-tag {
+  display: inline-block;
+  background-color: #FFCCE1;
+  color: #410579;
+
+  border: none;
+  border-radius: 20px;
+
+  padding: 4px 12px;
+
+  font: inherit;
+  font-size: inherit;
+
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button.author-tag:hover {
+  text-decoration: underline;
+}
+
+button.author-tag:focus-visible {
+  outline: 2px solid #410579;
+  outline-offset: 2px;
+}
