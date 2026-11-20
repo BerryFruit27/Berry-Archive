@@ -1323,6 +1323,13 @@ $("readerBackBottom").addEventListener("click", () => {
   showLibrary();
 });
 
+ // FLOATING BACK TO BOOKSHELF BUTTON
+
+$("floatingBackBtn").addEventListener("click", () => {
+  finishReadingPosition();
+  showLibrary();
+});
+
   $("closeDialogBtn").addEventListener("click", closeDialog);
   $("cancelDialogBtn").addEventListener("click", closeDialog);
 
