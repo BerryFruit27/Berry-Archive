@@ -923,11 +923,19 @@ function finishReadingPosition() {
     }];
   }
 
-  function renderChapterEditor() {
-    const host = $("chapterEditorList");
 
-    host.innerHTML = draftChapters.map((chapter, index) => `
-      <section class="chapter-edit-card" data-chapter-card="${index}">
+function renderChapterEditor() {
+  const host = $("chapterEditorList");
+
+  host.innerHTML = draftChapters.map((chapter, index) => `
+    <section class="chapter-edit-card" data-chapter-card="${index}">
+
+      <details class="chapter-collapse">
+
+        <summary>
+          Chapter ${index + 1}: ${escapeHTML(chapter.title)}
+        </summary>
+
         <div class="chapter-edit-header">
           <span class="chapter-number">CH. ${index + 1}</span>
 
@@ -966,44 +974,56 @@ function finishReadingPosition() {
         </div>
 
         <div class="chapter-mode-buttons">
-  <button
-    type="button"
-    data-editor-mode="${index}"
-    data-mode="formatted"
-    class="chapter-mode-btn active"
-  >
-    Formatted text
-  </button>
+          <button
+            type="button"
+            data-editor-mode="${index}"
+            data-mode="formatted"
+            class="chapter-mode-btn active"
+          >
+            Formatted text
+          </button>
 
-  <button
-    type="button"
-    data-editor-mode="${index}"
-    data-mode="html"
-    class="chapter-mode-btn"
-  >
-    HTML code
-  </button>
-</div>
+          <button
+            type="button"
+            data-editor-mode="${index}"
+            data-mode="html"
+            class="chapter-mode-btn"
+          >
+            HTML code
+          </button>
+        </div>
 
-<div
-  class="chapter-rich-editor"
-  contenteditable="true"
-  role="textbox"
-  aria-label="Chapter ${index + 1} formatted text"
-  aria-multiline="true"
-  data-chapter-rich="${index}"
->${cleanHTML(chapter.content)}</div>
+        <div
+          class="chapter-rich-editor"
+          contenteditable="true"
+          role="textbox"
+          aria-label="Chapter ${index + 1} formatted text"
+          aria-multiline="true"
+          data-chapter-rich="${index}"
+        >${cleanHTML(chapter.content)}</div>
 
-<textarea
-  data-chapter-content="${index}"
-  class="hidden"
-  rows="12"
-  aria-label="Chapter ${index + 1} HTML code"
-  placeholder="Chapter HTML..."
->${escapeHTML(chapter.content)}</textarea>
-      </section>
-    `).join("");
-  }
+        <textarea
+          data-chapter-content="${index}"
+          class="hidden"
+          rows="12"
+          aria-label="Chapter ${index + 1} HTML code"
+          placeholder="Chapter HTML..."
+        >${escapeHTML(chapter.content)}</textarea>
+
+        <button
+          type="button"
+          class="chapter-collapse-bottom"
+          data-collapse-chapter="${index}"
+        >
+          Collapse chapter ▲
+        </button>
+
+      </details>
+
+    </section>
+  `).join("");
+}
+
 
   
 function readChapterEditor() {
@@ -1763,14 +1783,24 @@ $("seriesBookList").addEventListener("keydown", event => {
       content: ""
     });
 
-    renderChapterEditor();
+   renderChapterEditor();
 
-    const inputs = $("chapterEditorList").querySelectorAll(
-      "[data-chapter-title]"
-    );
+// Open the newly added chapter.
+const chapters = $("chapterEditorList").querySelectorAll(
+  ".chapter-collapse"
+);
 
-    inputs[inputs.length - 1]?.focus();
-  });
+const newChapter = chapters[chapters.length - 1];
+
+if (newChapter) {
+  newChapter.open = true;
+
+  const titleInput = newChapter.querySelector(
+    "[data-chapter-title]"
+  );
+
+  titleInput.focus();
+}
 
   // EDIT CHAPTER CONTENT
 
@@ -1897,6 +1927,37 @@ $("chapterEditorList").addEventListener("paste", event => {
   readChapterEditor();
 });
 
+
+
+// COLLAPSE CHAPTER BUTTON
+
+$("chapterEditorList").addEventListener("click", event => {
+  const button = event.target.closest("[data-collapse-chapter]");
+
+  if (!button) return;
+
+  // Keep any changes made to the chapter.
+  readChapterEditor();
+
+  // Close this chapter.
+  const chapter = button.closest(".chapter-collapse");
+
+  chapter.open = false;
+});
+
+
+// UPDATE CHAPTER HEADING WHEN TITLE CHANGES
+
+$("chapterEditorList").addEventListener("input", event => {
+  if (!event.target.matches("[data-chapter-title]")) return;
+
+  const index = Number(event.target.dataset.chapterTitle);
+  const chapter = event.target.closest(".chapter-collapse");
+  const heading = chapter.querySelector("summary");
+
+  heading.textContent =
+    `Chapter ${index + 1}: ${event.target.value || "Untitled"}`;
+});
 
  
   // MOVE OR DELETE CHAPTERS
