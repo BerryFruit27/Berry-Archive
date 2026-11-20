@@ -12,7 +12,7 @@
   let toastTimer;
 
   const $ = id => document.getElementById(id);
-
+ 
   const state = {
     fics: [],
     query: "",
