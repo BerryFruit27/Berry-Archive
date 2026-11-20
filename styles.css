@@ -1725,6 +1725,7 @@ button.author-tag:focus-visible {
   margin: 2em auto;
 }
 
+
 /* COLLAPSIBLE CHAPTERS */
 
 .chapter-collapse {
@@ -1732,10 +1733,11 @@ button.author-tag:focus-visible {
 }
 
 .chapter-collapse summary {
-  background-color: #FFCCE1;
+  background-color: #EDE4FF;
   color: #410579;
 
   padding: 12px 15px;
+  border: 1px solid #A99BC5;
   border-radius: 10px;
 
   font-weight: bold;
@@ -1743,12 +1745,34 @@ button.author-tag:focus-visible {
 }
 
 .chapter-collapse summary:hover {
-  background-color: #f5a9d1;
+  background-color: #D8CAFF;
 }
 
 .chapter-collapse[open] summary {
   margin-bottom: 15px;
 }
+
+/* CHAPTER BUTTONS */
+
+.chapter-collapse-bottom {
+  display: inline-block;
+  margin-top: 15px;
+  margin-right: 10px;
+
+  background-color: #EDE4FF;
+  color: #410579;
+
+  border: 1px solid #410579;
+  border-radius: 15px;
+
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.chapter-collapse-bottom:hover {
+  background-color: #D8CAFF;
+}
+
 
 /* BUTTON AT BOTTOM OF CHAPTER */
 
@@ -1768,4 +1792,13 @@ button.author-tag:focus-visible {
 
 .chapter-collapse-bottom:hover {
   background-color: #f5a9d1;
+}
+
+
+/* CHAPTER ACTION BUTTONS */
+
+.chapter-collapse-bottom {
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 15px;
 }
