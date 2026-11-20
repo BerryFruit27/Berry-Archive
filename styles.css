@@ -1530,3 +1530,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .relationship-tag-list .tag:hover {
   background-color: #9FEFCB;
 }
+
+
+
+/* Series information underneath story tags */
+.card-series {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.card-series .text-button {
+  text-align: left;
+  padding: 0;
+  text-decoration: underline;
+}
