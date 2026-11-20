@@ -839,7 +839,10 @@ function showAuthor(authorName) {
       chapters.length - 1
     );
 
-    setChapter(currentChapterIndex, false);
+    // Restore the saved chapter.
+currentChapterIndex = fic.savedChapter || 0;
+
+setChapter(currentChapterIndex, false);
 
     $("readerBookmarkBtn").textContent =
       fic.bookmarked ? "♥" : "♡";
@@ -857,10 +860,36 @@ function showAuthor(authorName) {
     $("libraryView").classList.add("hidden");
     $("readerView").classList.remove("hidden");
 
-    renderLibrary();
-    window.scrollTo(0, 0);
+   renderLibrary();
+
+// Return to the saved reading position.
+requestAnimationFrame(() => {
+  window.scrollTo(0, fic.savedScroll || 0);
+});
   }
 
+ readingSaveTimer = setTimeout(() => {
+    saveFic(fic);
+  }, 500);
+}
+
+// Save while scrolling.
+window.addEventListener("scroll", saveReadingPosition);
+
+// Save when leaving the reader.
+function finishReadingPosition() {
+  const fic = state.fics.find(fic => fic.id === currentFicId);
+
+  if (!fic) return;
+
+  fic.savedChapter = currentChapterIndex;
+  fic.savedScroll = window.scrollY;
+
+  clearTimeout(readingSaveTimer);
+  saveFic(fic);
+}
+
+ 
   // CHAPTERS
 
   function normaliseChapters(fic) {
@@ -999,7 +1028,10 @@ function showAuthor(authorName) {
     $("nextChapterBottomBtn").disabled =
       currentChapterIndex === chapters.length - 1;
 
-    if (scroll) window.scrollTo(0, 0);
+    if (scroll) {
+  window.scrollTo(0, 0);
+  saveReadingPosition();
+}
   }
 
   // ADD / EDIT STORY
@@ -1266,8 +1298,15 @@ function showAuthor(authorName) {
   $("emptyAddBtn").addEventListener("click", () => openDialog());
 
   $("homeBtn").addEventListener("click", showLibrary);
-  $("backBtn").addEventListener("click", showLibrary);
-  $("readerBackBottom").addEventListener("click", showLibrary);
+$("backBtn").addEventListener("click", () => {
+  finishReadingPosition();
+  showLibrary();
+});
+
+$("readerBackBottom").addEventListener("click", () => {
+  finishReadingPosition();
+  showLibrary();
+});
 
   $("closeDialogBtn").addEventListener("click", closeDialog);
   $("cancelDialogBtn").addEventListener("click", closeDialog);
