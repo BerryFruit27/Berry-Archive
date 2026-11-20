@@ -868,13 +868,28 @@ requestAnimationFrame(() => {
 });
   }
 
- readingSaveTimer = setTimeout(() => {
-    saveFic(fic);
-  }, 500);
-}
+ // SAVE READING POSITION
 
-// Save while scrolling.
-window.addEventListener("scroll", saveReadingPosition);
+  let readingSaveTimer;
+
+  function saveReadingPosition() {
+    const fic = state.fics.find(fic => fic.id === currentFicId);
+
+    if (!fic) return;
+    if ($("readerView").classList.contains("hidden")) return;
+
+    fic.savedChapter = currentChapterIndex;
+    fic.savedScroll = window.scrollY;
+
+    clearTimeout(readingSaveTimer);
+
+    readingSaveTimer = setTimeout(() => {
+      saveFic(fic);
+    }, 500);
+  }
+
+  // Save while scrolling.
+  window.addEventListener("scroll", saveReadingPosition);
 
 // Save when leaving the reader.
 function finishReadingPosition() {
