@@ -1,4 +1,4 @@
-const CACHE_NAME = "berrys-archive-v22";
+const CACHE_NAME = "berrys-archive-v23";
 const APP_FILES = [
   "./",
   "./index.html",
