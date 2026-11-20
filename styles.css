@@ -1615,3 +1615,70 @@ button.author-tag:focus-visible {
     font-size: 12px;
   }
 }
+
+
+/* CHAPTER EDITOR MODES */
+
+.chapter-mode-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.chapter-mode-btn {
+  background-color: #f5e9fa;
+  color: #410579;
+  border: 1px solid #410579;
+  border-radius: 15px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.chapter-mode-btn.active {
+  background-color: #FFCCE1;
+  font-weight: bold;
+}
+
+/* FORMATTED TEXT EDITOR */
+
+.chapter-rich-editor {
+  background-color: white;
+  color: #222;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  padding: 18px;
+  min-height: 220px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.chapter-rich-editor p {
+  margin: 0 0 16px;
+}
+
+.chapter-rich-editor hr {
+  border: none;
+  border-top: 1px solid #aaa;
+  margin: 24px 0;
+}
+
+.chapter-rich-editor:focus {
+  outline: 2px solid #410579;
+}
+
+/* HTML CODE EDITOR */
+
+.chapter-edit-card textarea[data-chapter-content] {
+  width: 100%;
+  min-height: 220px;
+  font-family: monospace;
+}
+
+/* HIDE INACTIVE EDITORS */
+
+.chapter-rich-editor.hidden,
+.chapter-edit-card textarea.hidden {
+  display: none;
+}
