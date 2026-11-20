@@ -502,8 +502,9 @@
 
     const index = seriesStories.findIndex(story => story.id === fic.id);
 
-    $("seriesLabel").textContent =
-      `Part ${fic.seriesPosition || 1} of ${fic.series}`;
+    $("seriesPartNumber").textContent = fic.seriesPosition || 1;
+$("seriesNameBtn").textContent = fic.series;
+$("seriesNameBtn").onclick = () => showSeries(fic.series);
 
     const previousButton = $("previousSeriesBtn");
     const nextButton = $("nextSeriesBtn");
@@ -528,8 +529,54 @@
     navigation.classList.remove("hidden");
   }
 
+// SHOW ALL BOOKS IN A SERIES
+
+function showSeries(seriesName) {
+  const books = state.fics
+    .filter(fic =>
+      (fic.series || "").trim().toLocaleLowerCase("en-CA") ===
+      seriesName.trim().toLocaleLowerCase("en-CA")
+    )
+    .sort((first, second) =>
+      (Number(first.seriesPosition) || 1) -
+      (Number(second.seriesPosition) || 1)
+    );
+
+  $("seriesPageTitle").textContent = seriesName;
+
+  $("seriesBookCount").textContent =
+    `${books.length} ${books.length === 1 ? "book" : "books"} in this series`;
+
+  $("seriesBookList").innerHTML = books.map(fic => `
+    <article
+      class="fic-card"
+      data-series-open="${escapeHTML(fic.id)}"
+      tabindex="0"
+      role="button"
+    >
+      <h3>${escapeHTML(fic.title)}</h3>
+
+      <p class="card-author">
+        ${fic.author ? "by " + escapeHTML(fic.author) : "Author unknown"}
+      </p>
+
+      <p>Part ${fic.seriesPosition || 1}</p>
+
+      <p class="card-summary">${escapeHTML(fic.summary || "")}</p>
+    </article>
+  `).join("");
+
+  $("libraryView").classList.add("hidden");
+  $("readerView").classList.add("hidden");
+  $("seriesView").classList.remove("hidden");
+
+  window.scrollTo(0, 0);
+}
+
+
  
   function showLibrary() {
+    $("seriesView").classList.add("hidden");
     $("libraryView").classList.remove("hidden");
     $("readerView").classList.add("hidden");
 
@@ -542,6 +589,7 @@
   async function openReader(id) {
     const fic = state.fics.find(fic => fic.id === id);
     if (!fic) return;
+   $("seriesView").classList.add("hidden");
 
     currentFicId = id;
     fic.lastOpenedAt = Date.now();
@@ -1204,6 +1252,40 @@
     }
   });
 
+// SERIES PAGE BUTTONS
+
+$("seriesBackBtn").addEventListener("click", () => {
+  $("seriesView").classList.add("hidden");
+
+  if (currentFicId) {
+    $("readerView").classList.remove("hidden");
+  } else {
+    showLibrary();
+  }
+});
+
+$("seriesBookList").addEventListener("click", event => {
+  const book = event.target.closest("[data-series-open]");
+
+  if (book) {
+    $("seriesView").classList.add("hidden");
+    currentChapterIndex = 0;
+    openReader(book.dataset.seriesOpen);
+  }
+});
+
+$("seriesBookList").addEventListener("keydown", event => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+
+  const book = event.target.closest("[data-series-open]");
+  if (!book) return;
+
+  event.preventDefault();
+  $("seriesView").classList.add("hidden");
+  currentChapterIndex = 0;
+  openReader(book.dataset.seriesOpen);
+});
+ 
   // READER BUTTONS
 
   $("readerBookmarkBtn").addEventListener("click", async () => {
