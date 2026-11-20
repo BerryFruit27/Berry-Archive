@@ -1725,4 +1725,47 @@ button.author-tag:focus-visible {
   margin: 2em auto;
 }
 
+/* COLLAPSIBLE CHAPTERS */
 
+.chapter-collapse {
+  margin-bottom: 10px;
+}
+
+.chapter-collapse summary {
+  background-color: #FFCCE1;
+  color: #410579;
+
+  padding: 12px 15px;
+  border-radius: 10px;
+
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.chapter-collapse summary:hover {
+  background-color: #f5a9d1;
+}
+
+.chapter-collapse[open] summary {
+  margin-bottom: 15px;
+}
+
+/* BUTTON AT BOTTOM OF CHAPTER */
+
+.chapter-collapse-bottom {
+  display: block;
+  margin-top: 15px;
+
+  background-color: #FFCCE1;
+  color: #410579;
+
+  border: 1px solid #410579;
+  border-radius: 15px;
+
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.chapter-collapse-bottom:hover {
+  background-color: #f5a9d1;
+}
