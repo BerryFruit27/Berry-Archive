@@ -965,37 +965,77 @@ function finishReadingPosition() {
           </div>
         </div>
 
-        <textarea
-          data-chapter-content="${index}"
-          rows="7"
-          aria-label="Chapter ${index + 1} HTML or text"
-          placeholder="Chapter content..."
-        >${escapeHTML(chapter.content)}</textarea>
+        <div class="chapter-mode-buttons">
+  <button
+    type="button"
+    data-editor-mode="${index}"
+    data-mode="formatted"
+    class="chapter-mode-btn active"
+  >
+    Formatted text
+  </button>
+
+  <button
+    type="button"
+    data-editor-mode="${index}"
+    data-mode="html"
+    class="chapter-mode-btn"
+  >
+    HTML code
+  </button>
+</div>
+
+<div
+  class="chapter-rich-editor"
+  contenteditable="true"
+  role="textbox"
+  aria-label="Chapter ${index + 1} formatted text"
+  aria-multiline="true"
+  data-chapter-rich="${index}"
+>${cleanHTML(chapter.content)}</div>
+
+<textarea
+  data-chapter-content="${index}"
+  class="hidden"
+  rows="12"
+  aria-label="Chapter ${index + 1} HTML code"
+  placeholder="Chapter HTML..."
+>${escapeHTML(chapter.content)}</textarea>
       </section>
     `).join("");
   }
 
-  function readChapterEditor() {
-    $("chapterEditorList")
-      .querySelectorAll("[data-chapter-title]")
-      .forEach(input => {
-        const index = Number(input.dataset.chapterTitle);
+  
+function readChapterEditor() {
+  // Save chapter titles.
+  $("chapterEditorList")
+    .querySelectorAll("[data-chapter-title]")
+    .forEach(input => {
+      const index = Number(input.dataset.chapterTitle);
 
-        if (draftChapters[index]) {
-          draftChapters[index].title = input.value;
-        }
-      });
+      if (draftChapters[index]) {
+        draftChapters[index].title = input.value;
+      }
+    });
 
-    $("chapterEditorList")
-      .querySelectorAll("[data-chapter-content]")
-      .forEach(input => {
-        const index = Number(input.dataset.chapterContent);
+  // Save content from whichever editor is visible.
+  $("chapterEditorList")
+    .querySelectorAll("[data-chapter-content]")
+    .forEach(textarea => {
+      const index = Number(textarea.dataset.chapterContent);
+      const card = textarea.closest(".chapter-edit-card");
+      const richEditor = card.querySelector("[data-chapter-rich]");
 
-        if (draftChapters[index]) {
-          draftChapters[index].content = input.value;
-        }
-      });
-  }
+      if (!draftChapters[index]) return;
+
+      if (textarea.classList.contains("hidden")) {
+        draftChapters[index].content = cleanHTML(richEditor.innerHTML);
+      } else {
+        draftChapters[index].content = textarea.value;
+      }
+    });
+}
+
 
   function setChapter(index, scroll = true) {
     const fic = state.fics.find(fic => fic.id === currentFicId);
@@ -1750,6 +1790,115 @@ $("seriesBookList").addEventListener("keydown", event => {
     }
   });
 
+
+
+// FORMATTED TEXT AND HTML EDITOR
+
+$("chapterEditorList").addEventListener("click", event => {
+  const button = event.target.closest("[data-editor-mode]");
+
+  if (!button) return;
+
+  const index = Number(button.dataset.editorMode);
+  const card = button.closest(".chapter-edit-card");
+
+  const richEditor = card.querySelector("[data-chapter-rich]");
+  const htmlEditor = card.querySelector("[data-chapter-content]");
+
+  if (button.dataset.mode === "html") {
+    // Copy formatted content into the HTML editor.
+    if (!richEditor.classList.contains("hidden")) {
+      htmlEditor.value = cleanHTML(richEditor.innerHTML);
+    }
+
+    richEditor.classList.add("hidden");
+    htmlEditor.classList.remove("hidden");
+    htmlEditor.focus();
+  } else {
+    // Display the HTML as formatted text.
+    if (!htmlEditor.classList.contains("hidden")) {
+      richEditor.innerHTML = cleanHTML(htmlEditor.value);
+    }
+
+    htmlEditor.classList.add("hidden");
+    richEditor.classList.remove("hidden");
+    richEditor.focus();
+  }
+
+  // Highlight the selected mode.
+  card.querySelectorAll("[data-editor-mode]").forEach(modeButton => {
+    modeButton.classList.toggle(
+      "active",
+      modeButton.dataset.mode === button.dataset.mode
+    );
+  });
+
+  readChapterEditor();
+});
+
+
+// PASTE FORMATTED TEXT FROM AO3 OR WORD
+
+$("chapterEditorList").addEventListener("paste", event => {
+  const editor = event.target.closest("[data-chapter-rich]");
+
+  if (!editor) return;
+
+  const clipboard = event.clipboardData;
+  if (!clipboard) return;
+
+  const html = clipboard.getData("text/html");
+  const text = clipboard.getData("text/plain");
+
+  if (!html && !text) return;
+
+  event.preventDefault();
+
+  let content = "";
+
+  if (html) {
+    content = cleanHTML(html);
+  } else {
+    content = text
+      .split(/\r?\n\r?\n/)
+      .map(paragraph => {
+        return "<p>" +
+          escapeHTML(paragraph).replace(/\r?\n/g, "<br>") +
+          "</p>";
+      })
+      .join("");
+  }
+
+  // Insert at the cursor, not at the end of the chapter.
+  const selection = window.getSelection();
+
+  if (!selection || !selection.rangeCount) return;
+
+  const range = selection.getRangeAt(0);
+
+  if (!editor.contains(range.commonAncestorContainer)) return;
+
+  range.deleteContents();
+
+  const fragment = range.createContextualFragment(content);
+  const lastNode = fragment.lastChild;
+
+  range.insertNode(fragment);
+
+  if (lastNode) {
+    range.setStartAfter(lastNode);
+    range.collapse(true);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  // Update the chapter's draft.
+  readChapterEditor();
+});
+
+
+ 
   // MOVE OR DELETE CHAPTERS
 
   $("chapterEditorList").addEventListener("click", event => {
