@@ -542,9 +542,7 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
     navigation.classList.remove("hidden");
   }
 
-// SHOW ALL BOOKS IN A SERIES
 
-function showSeries(seriesName) {
   
   // SHOW ALL BOOKS IN A SERIES
 
