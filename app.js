@@ -429,6 +429,19 @@
             ${tags}
           </div>
 
+          ${fic.series ? `
+            <div class="card-series">
+              <button
+                type="button"
+                class="text-button"
+                data-open-series="${escapeHTML(fic.series)}"
+              >
+                Series: ${escapeHTML(fic.series)}
+                (Part ${fic.seriesPosition || 1})
+              </button>
+            </div>
+          ` : ""}
+
           ${showExpandButton ? `
             <button
               class="expand-card-btn"
@@ -532,47 +545,109 @@ $("seriesNameBtn").onclick = () => showSeries(fic.series);
 // SHOW ALL BOOKS IN A SERIES
 
 function showSeries(seriesName) {
-  const books = state.fics
-    .filter(fic =>
-      (fic.series || "").trim().toLocaleLowerCase("en-CA") ===
-      seriesName.trim().toLocaleLowerCase("en-CA")
-    )
-    .sort((first, second) =>
-      (Number(first.seriesPosition) || 1) -
-      (Number(second.seriesPosition) || 1)
-    );
+  
+  // SHOW ALL BOOKS IN A SERIES
 
-  $("seriesPageTitle").textContent = seriesName;
+  function showSeries(seriesName) {
+    const books = state.fics
+      .filter(fic =>
+        (fic.series || "").trim().toLocaleLowerCase("en-CA") ===
+        seriesName.trim().toLocaleLowerCase("en-CA")
+      )
+      .sort((first, second) =>
+        (Number(first.seriesPosition) || 1) -
+        (Number(second.seriesPosition) || 1)
+      );
 
-  $("seriesBookCount").textContent =
-    `${books.length} ${books.length === 1 ? "book" : "books"} in this series`;
+    $("seriesPageTitle").textContent = seriesName;
 
-  $("seriesBookList").innerHTML = books.map(fic => `
-    <article
-      class="fic-card"
-      data-series-open="${escapeHTML(fic.id)}"
-      tabindex="0"
-      role="button"
-    >
-      <h3>${escapeHTML(fic.title)}</h3>
+    $("seriesBookCount").textContent =
+      `${books.length} ${books.length === 1 ? "book" : "books"} in this series`;
 
-      <p class="card-author">
-        ${fic.author ? "by " + escapeHTML(fic.author) : "Author unknown"}
-      </p>
+    $("seriesBookList").innerHTML = books.map(fic => {
+      const chapters = normaliseChapters(fic);
 
-      <p>Part ${fic.seriesPosition || 1}</p>
+      const words = chapters.reduce((total, chapter) =>
+        total + wordCount(chapter.content), 0
+      );
 
-      <p class="card-summary">${escapeHTML(fic.summary || "")}</p>
-    </article>
-  `).join("");
+      const relationships = (fic.relationships || []).map(relationship =>
+        `<span class="tag">${escapeHTML(relationship)}</span>`
+      ).join("");
 
-  $("libraryView").classList.add("hidden");
-  $("readerView").classList.add("hidden");
-  $("seriesView").classList.remove("hidden");
+      const tags = (fic.tags || []).map(tag =>
+        `<span class="tag">${escapeHTML(tag)}</span>`
+      ).join("");
 
-  window.scrollTo(0, 0);
-}
+      return `
+        <article
+          class="fic-card"
+          data-series-open="${escapeHTML(fic.id)}"
+          tabindex="0"
+          role="button"
+          aria-label="Read ${escapeHTML(fic.title)}"
+        >
+          <div class="card-top">
+            <span class="card-fandom">
+              ${escapeHTML(fic.fandom || "Uncategorised")}
+            </span>
 
+            <div class="card-actions">
+              <button
+                type="button"
+                class="card-bookmark"
+                data-series-bookmark="${escapeHTML(fic.id)}"
+                aria-label="${fic.bookmarked ? "Remove bookmark" : "Bookmark"}"
+                title="${fic.bookmarked ? "Remove bookmark" : "Bookmark"}"
+              >${fic.bookmarked ? "♥" : "♡"}</button>
+            </div>
+          </div>
+
+          <h3>${escapeHTML(fic.title)}</h3>
+
+          <p class="card-author">
+            ${fic.author ? "by " + escapeHTML(fic.author) : "Author unknown"}
+          </p>
+
+          ${fic.summary ? `
+            <p class="card-summary">
+              ${escapeHTML(fic.summary)}
+            </p>
+          ` : ""}
+
+          <div class="tag-list relationship-tag-list">
+            ${relationships}
+          </div>
+
+          <div class="tag-list">
+            ${tags}
+          </div>
+
+          <div class="card-series">
+            <span>Part ${fic.seriesPosition || 1} of ${escapeHTML(seriesName)}</span>
+          </div>
+
+          <div class="card-bottom">
+            <span>
+              ${formatNumber(words)} words ·
+              ${chapters.length} ${chapters.length === 1 ? "chapter" : "chapters"} ·
+              ${dateLabel(fic.createdAt)}
+            </span>
+
+            <span class="status-pill ${fic.read ? "read" : ""}">
+              ${statusText(fic)}
+            </span>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    $("libraryView").classList.add("hidden");
+    $("readerView").classList.add("hidden");
+    $("seriesView").classList.remove("hidden");
+
+    window.scrollTo(0, 0);
+  }
 
  
   function showLibrary() {
@@ -1148,6 +1223,16 @@ function showSeries(seriesName) {
 
    $("ficGrid").addEventListener("click", async event => {
 
+
+       // Open the series page when its name is clicked.
+    const clickedSeries = event.target.closest("[data-open-series]");
+
+    if (clickedSeries) {
+      event.stopPropagation();
+      showSeries(clickedSeries.dataset.openSeries);
+      return;
+    }
+    
     // Clicking a relationship filters the bookshelf.
     const clickedRelationship = event.target.closest(
       "[data-filter-relationship]"
@@ -1264,16 +1349,32 @@ $("seriesBackBtn").addEventListener("click", () => {
   }
 });
 
-$("seriesBookList").addEventListener("click", event => {
+$("seriesBookList").addEventListener("click", async event => {
+
+  // Check whether the bookmark heart was clicked.
+  const bookmark = event.target.closest("[data-series-bookmark]");
+
+  if (bookmark) {
+    event.stopPropagation();
+
+    await toggleBookmark(bookmark.dataset.seriesBookmark);
+
+    // Update the hearts on the series page.
+    showSeries($("seriesPageTitle").textContent);
+    return;
+  }
+
+  // Otherwise, open the selected book.
   const book = event.target.closest("[data-series-open]");
 
   if (book) {
     $("seriesView").classList.add("hidden");
     currentChapterIndex = 0;
-    openReader(book.dataset.seriesOpen);
+    await openReader(book.dataset.seriesOpen);
   }
 });
 
+ 
 $("seriesBookList").addEventListener("keydown", event => {
   if (event.key !== "Enter" && event.key !== " ") return;
 
