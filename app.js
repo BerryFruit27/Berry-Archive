@@ -1018,6 +1018,14 @@ function renderChapterEditor() {
           Collapse chapter ▲
         </button>
 
+        <button
+  type="button"
+  class="chapter-collapse-bottom"
+  data-add-chapter-after="${index}"
+>
+  + Add chapter
+</button>
+
       </details>
 
     </section>
@@ -1962,6 +1970,37 @@ $("chapterEditorList").addEventListener("input", event => {
     `Chapter ${index + 1}: ${event.target.value || "Untitled"}`;
 });
 
+ // ADD A CHAPTER AFTER THE CURRENT CHAPTER
+
+$("chapterEditorList").addEventListener("click", event => {
+  const button = event.target.closest("[data-add-chapter-after]");
+
+  if (!button) return;
+
+  readChapterEditor();
+
+  const index = Number(button.dataset.addChapterAfter);
+
+  draftChapters.splice(index + 1, 0, {
+    id: uid(),
+    title: `Chapter ${index + 2}`,
+    content: ""
+  });
+
+  renderChapterEditor();
+
+  // Open the new chapter.
+  const chapters = $("chapterEditorList").querySelectorAll(
+    ".chapter-collapse"
+  );
+
+  const newChapter = chapters[index + 1];
+
+  if (newChapter) {
+    newChapter.open = true;
+    newChapter.querySelector("[data-chapter-title]").focus();
+  }
+});
  
   // MOVE OR DELETE CHAPTERS
 
