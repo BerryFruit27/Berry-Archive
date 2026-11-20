@@ -1802,6 +1802,9 @@ if (newChapter) {
   titleInput.focus();
 }
 
+}); // CLOSE ADD CHAPTER BUTTON
+
+
   // EDIT CHAPTER CONTENT
 
   $("chapterEditorList").addEventListener("input", event => {
